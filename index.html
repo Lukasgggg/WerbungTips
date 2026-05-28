@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Werbung Pro — Studio</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Montserrat:wght@800&family=Pacifico&family=Poppins:wght@800&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gifshot/0.3.2/gifshot.min.js"></script>
+    
+    <style>
+        :root {
+            --bg-color: #f5f5f7;
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --card-border: rgba(0, 0, 0, 0.08);
+            --text-main: #1d1d1f;
+            --text-sub: #6e6e73;
+            --canvas-bg: #e8eaed;
+            --input-bg: #ffffff;
+            --gradient-string: linear-gradient(45deg, #ff0055, #f97316, #eab308, #22c55e, #3b82f6, #9333ea, #ff0055);
+            --bg-size-value: 600% 600%;
+            --accent: #3b82f6;
+            --delete-color: #ef4444;
+            --admin-color: #a855f7;
+        }
+
+        body.dark-theme {
+            --bg-color: #0f1115;
+            --card-bg: rgba(22, 26, 33, 0.8);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --text-main: #f5f5f7;
+            --text-sub: #8a8f98;
+            --canvas-bg: #1a1d24;
+            --input-bg: rgba(0, 0, 0, 0.3);
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0; padding: 20px;
+            min-height: 100vh;
+            box-sizing: border-box; transition: background-color 0.4s ease, color 0.4s ease;
+        }
+
+        #gatekeeperOverlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: var(--bg-color); z-index: 9999;
+            display: flex; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box;
+        }
+        .login-card {
+            background: var(--card-bg); border: 1px solid var(--card-border);
+            padding: 35px; border-radius: 28px; box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+            width: 100%; max-width: 400px; text-align: center; backdrop-filter: blur(20px);
+        }
+
+        #mainAppLayout {
+            display: none; flex-direction: column; gap: 20px;
+        }
+        @media (min-width: 1024px) {
+            #mainAppLayout { flex-direction: row; justify-content: center; align-items: flex-start; }
+        }
+
+        .sidebar-left { width: 100%; max-width: 320px; display: flex; flex-direction: column; gap: 20px; box-sizing: border-box; }
+        .sidebar-card { background: var(--card-bg); border: 1px solid var(--card-border); padding: 20px; border-radius: 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.05); backdrop-filter: blur(12px); box-sizing: border-box; }
+        .panel { background: var(--card-bg); backdrop-filter: blur(12px); border: 1px solid var(--card-border); padding: 25px; border-radius: 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); width: 100%; max-width: 420px; box-sizing: border-box; }
+        .preview-panel { background: var(--card-bg); backdrop-filter: blur(12px); border: 1px solid var(--card-border); padding: 25px; border-radius: 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); width: 100%; flex: 1; max-width: 550px; display: flex; flex-direction: column; align-items: center; box-sizing: border-box; }
+
+        .slides-list { margin-top: 15px; display: flex; flex-direction: column; gap: 10px; max-height: 250px; overflow-y: auto; padding-right: 5px; }
+        .slide-item { background: var(--input-bg); border: 1px solid var(--card-border); padding: 12px 15px; border-radius: 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: all 0.2s ease; }
+        .slide-item:hover { transform: translateY(-2px); border-color: var(--accent); }
+        .slide-item.active { border-color: #10b981; background: rgba(16, 185, 129, 0.1); }
+        .slide-item-title { font-weight: 600; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 160px; pointer-events: none; }
+        
+        .slide-action-btn { background: rgba(239, 68, 68, 0.1); border: none; color: var(--delete-color); cursor: pointer; padding: 8px 10px; border-radius: 8px; font-size: 13px; transition: all 0.2s; display: flex; align-items: center; justify-content: center; }
+        .slide-action-btn:hover { background: var(--delete-color); color: white; transform: scale(1.05); }
+
+        .shared-area { width: 100%; margin-top: 25px; border-top: 2px dashed var(--card-border); padding-top: 20px; box-sizing: border-box; }
+        .shared-list { display: flex; flex-direction: column; gap: 10px; max-height: 250px; overflow-y: auto; margin-top: 12px; padding-right: 5px; }
+        .shared-item { background: var(--input-bg); border: 1px solid var(--card-border); padding: 12px 15px; border-radius: 14px; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+        .shared-item-info { display: flex; flex-direction: column; gap: 2px; overflow: hidden; }
+        .shared-item-title { font-weight: 600; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px; color: var(--text-main); }
+        .shared-item-author { font-size: 11px; color: var(--accent); font-weight: 700; display: flex; align-items: center; gap: 4px; }
+        .btn-add-shared { background: rgba(59, 130, 246, 0.1); border: none; color: var(--accent); padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; }
+        .btn-add-shared:hover { background: var(--accent); color: white; }
+        .btn-delete-shared { background: rgba(239, 68, 68, 0.1); border: none; color: var(--delete-color); padding: 6px 10px; border-radius: 8px; font-size: 12px; cursor: pointer; }
+        .btn-delete-shared:hover { background: var(--delete-color); color: white; }
+
+        .admin-card { border: 2px solid var(--admin-color) !important; background: rgba(168, 85, 247, 0.04) !important; }
+
+        .top-menu-container { position: fixed; top: 15px; right: 15px; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; z-index: 1000; pointer-events: none; }
+        .button-row { display: flex; gap: 12px; pointer-events: auto; }
+        .menu-btn { background: var(--card-bg); border: 1px solid var(--card-border); color: var(--text-main); width: 44px; height: 44px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+
+        .paint-palette { background: var(--card-bg); border: 1px solid var(--card-border); padding: 14px; border-radius: 20px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); opacity: 0; transform: translateY(-10px); pointer-events: none; transition: all 0.3s ease; width: max-content; }
+        .paint-palette.active { opacity: 1; transform: translateY(0); pointer-events: auto; }
+        .color-swatch { width: 38px; height: 38px; border-radius: 50%; cursor: pointer; border: 2px solid white; }
+
+        .moving-gradient { background: var(--gradient-string); background-size: var(--bg-size-value); animation: flowGradient 25s linear infinite; }
+        @keyframes flowGradient { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
+        h1, h2 { font-size: 16px; margin: 0; font-weight: 700; color: var(--text-main); display: flex; align-items: center; gap: 8px; }
+        .subtitle { color: var(--text-sub); font-size: 13px; margin-bottom: 15px; margin-top: 2px; }
+
+        .btn-step { color: white; border: none; padding: 13px 18px; font-size: 14px; font-weight: 700; border-radius: 12px; cursor: pointer; width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; box-sizing: border-box; transition: all 0.2s; }
+        .btn-step:hover { opacity: 0.9; transform: translateY(-1px); }
+        .btn-secondary { background: var(--input-bg); color: var(--text-main); border: 1px solid var(--card-border); padding: 10px; border-radius: 10px; cursor: pointer; font-weight: 600; width: 100%; margin-top: 10px; }
+
+        .acc-group { border-top: 1px solid var(--card-border); padding: 14px 0; overflow: hidden; }
+        .acc-group.no-border { border-top: none; padding-top: 0; }
+        .acc-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; user-select: none; }
+        .acc-icon { font-size: 11px; color: var(--text-sub); background: var(--input-bg); padding: 4px 10px; border-radius: 6px; border: 1px solid var(--card-border); transition: transform 0.3s; }
+        .acc-content { max-height: 0; opacity: 0; overflow: hidden; transition: max-height 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease; }
+        .acc-group.active .acc-content { max-height: 500px; opacity: 1; padding-top: 15px; }
+        .acc-group.active .acc-icon { transform: rotate(180deg); }
+
+        textarea, select, input[type="number"], input[type="text"], input[type="password"] { width: 100%; padding: 10px; background: var(--input-bg); border: 1px solid var(--card-border); border-radius: 8px; font-size: 14px; color: var(--text-main); box-sizing: border-box; }
+        textarea { height: 65px; resize: vertical; }
+        
+        .gear-btn { background: var(--input-bg); border: 1px solid var(--card-border); color: var(--text-main); width: 42px; height: 42px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .extra-settings { background: rgba(0,0,0,0.03); border-radius: 12px; padding: 12px; margin-top: 10px; display: none; }
+        .extra-settings.visible { display: block; }
+
+        #canvasPreview { width: 100%; max-width: 100%; height: auto; max-height: 50vh; border: 1px solid var(--card-border); background: #000; border-radius: 16px; box-shadow: 0 15px 40px rgba(0,0,0,0.1); }
+        
+        .status { padding: 12px; border-radius: 10px; font-size: 13px; font-weight: 600; text-align: center; margin-top: 15px; display: block; background: #f3f4f6; color: #374151; border: 1px solid #e5e7eb; }
+        .status.success { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+        .status.progress { background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }
+        
+        .download-box { margin-top: 15px; background: rgba(34, 197, 94, 0.15); border: 2px solid #22c55e; border-radius: 14px; padding: 15px; text-align: center; display: none; cursor: pointer; }
+        #hiddenVideo { display: none; }
+
+        .auth-error { color: var(--delete-color); font-size: 12px; margin-top: 8px; font-weight: 600; text-align: center; }
+        .admin-success { color: #166534; font-size: 12px; margin-top: 8px; font-weight: 600; text-align: center; }
+    </style>
+</head>
+<body>
+
+<div id="gatekeeperOverlay">
+    <div class="login-card">
+        <h1 style="font-size: 22px; justify-content: center; margin-bottom: 5px;"><i class="fa-solid fa-lock" style="color: var(--accent);"></i> Werbung Pro</h1>
+        <div class="subtitle" style="margin-bottom: 25px;">Bitte logge dich ein, um das Studio zu öffnen</div>
+        
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+            <input type="text" id="loginUsername" placeholder="Benutzername">
+            <input type="password" id="loginPassword" placeholder="Passwort">
+            <button class="btn-step moving-gradient" style="padding: 14px;" onclick="handleLogin()">
+                <i class="fa-solid fa-right-to-bracket"></i> Studio betreten
+            </button>
+            <div id="authError" class="auth-error"></div>
+        </div>
+    </div>
+</div>
+
+<div id="mainAppLayout">
+
+    <div class="top-menu-container">
+        <div class="button-row">
+            <button class="menu-btn" onclick="togglePalette()">🎨</button>
+            <button class="menu-btn" id="themeToggleBtn" onclick="toggleTheme()">🌙</button>
+        </div>
+        <div class="paint-palette" id="paintPalette">
+            <div class="color-swatch" style="background: linear-gradient(45deg, #ff0055, #f97316, #eab308, #22c55e, #3b82f6, #9333ea, #ff0055);" onclick="setGradient('linear-gradient(45deg, #ff0055, #f97316, #eab308, #22c55e, #3b82f6, #9333ea, #ff0055)', '600% 600%')"></div>
+            <div class="color-swatch" style="background: linear-gradient(45deg, #3b82f6, #8b5cf6, #ec4899, #3b82f6);" onclick="setGradient('linear-gradient(45deg, #3b82f6, #8b5cf6, #ec4899, #3b82f6)', '300% 300%')"></div>
+            <div class="color-swatch" style="background: linear-gradient(45deg, #f59e0b, #ef4444, #d946ef, #f59e0b);" onclick="setGradient('linear-gradient(45deg, #f59e0b, #ef4444, #d946ef, #f59e0b)', '400% 400%')"></div>
+        </div>
+    </div>
+
+    <div class="sidebar-left">
+        <div class="sidebar-card" style="border-color: var(--accent); background: rgba(59, 130, 246, 0.05);">
+            <h2><i class="fa-solid fa-play"></i> Start & Übertragung</h2>
+            <div class="subtitle">Präsentation live abspielen</div>
+            
+            <div style="margin-bottom: 12px;">
+                <label style="font-size: 11px; color: var(--text-sub); display: block; margin-bottom: 4px; font-weight: 600;">Google Slides Link:</label>
+                <input type="text" id="googleSlidesUrlInput" value="https://docs.google.com/presentation/d/e/2PACX-1vQYSDiNWgoUySOYEu1qDTetowoaZc7hbNeWHeG8gMveqpJRoWj_qr9QNpmiwHGo1AR9n80qi9nXCbm8/pub?start=true&loop=true&delayms=10000">
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+                <button class="btn-step moving-gradient" onclick="openGoogleSlidesPresentation()">
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i> 📺 Diashow starten
+                </button>
+                <button class="btn-secondary" style="margin-top:0; padding:12px;" onclick="triggerNativeCast()">
+                    <i class="fa-solid fa-wifi"></i> 🌐 Tutorial in Google Chrome zum Box verbinden (Cast) 🌐
+                </button>
+            </div>
+        </div>
+
+        <div class="sidebar-card">
+            <h2><i class="fa-solid fa-layer-group"></i> Meine Folien</h2>
+            <div class="subtitle" id="slidesCardSubtitle">Deine persönlichen Folien</div>
+            
+            <div id="protectedSlidesArea">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; background: rgba(0,0,0,0.04); padding: 6px 10px; border-radius: 8px;">
+                    <span id="loggedInUserLabel" style="font-size: 13px; font-weight: 700; color: var(--text-main);">👤 Bearbeiter</span>
+                    <span onclick="handleLogout()" style="color: var(--delete-color); font-size: 12px; font-weight: 700; cursor: pointer;"><i class="fa-solid fa-right-from-bracket"></i> Abmelden</span>
+                </div>
+                <button class="btn-step" style="background: #10b981; padding: 10px; font-size: 14px;" onclick="createNewSlide()">
+                    <i class="fa-solid fa-plus"></i> Neue Folie hinzufügen
+                </button>
+                <div class="slides-list" id="slidesListContainer"></div>
+            </div>
+        </div>
+
+        <div class="sidebar-card admin-card" id="adminPanelCard" style="display: none;">
+            <h2><i class="fa-solid fa-user-shield" style="color: var(--admin-color);"></i> Admin-Verwaltung</h2>
+            <div class="subtitle">Neues Konto anlegen</div>
+            
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+                <input type="text" id="adminNewUsername" placeholder="Neuer Benutzername">
+                <input type="password" id="adminNewPassword" placeholder="Passwort vergeben">
+                <button class="btn-step" style="background: var(--admin-color); padding: 8px; font-size: 13px;" onclick="adminCreateUser()">
+                    <i class="fa-solid fa-user-plus"></i> Konto erstellen
+                </button>
+                <div id="adminPanelMessage"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel">
+        <div class="acc-group no-border active" id="group-upload">
+            <div class="acc-header" onclick="openAccordion('group-upload')">
+                <h2>1. Bild oder Video laden</h2>
+                <span class="acc-icon">▼</span>
+            </div>
+            <div class="acc-content">
+                <div style="border: 2px dashed var(--card-border); border-radius: 12px; padding: 20px; text-align: center; background: var(--input-bg); cursor: pointer;" onclick="document.getElementById('fileInput').click()">
+                    <span id="dropZoneText">Datei auswählen</span>
+                    <input type="file" id="fileInput" accept="image/*,video/*" style="display:none" onchange="handleFileSelect(this)">
+                </div>
+            </div>
+        </div>
+
+        <div class="acc-group" id="group-text">
+            <div class="acc-header" onclick="openAccordion('group-text')">
+                <h2>2. Text auf der Folie</h2>
+                <span class="acc-icon">▼</span>
+            </div>
+            <div class="acc-content">
+                <textarea id="slideText" oninput="autoSaveAndRefresh()" placeholder="Dein Werbetext..."></textarea>
+            </div>
+        </div>
+
+        <div class="acc-group" id="group-format">
+            <div class="acc-header" onclick="openAccordion('group-format')">
+                <h2>3. Formatierung (5 Fonts)</h2>
+                <span class="acc-icon">▼</span>
+            </div>
+            <div class="acc-content">
+                <div style="display:flex; gap:10px;">
+                    <select id="fontFamily" onchange="autoSaveAndRefresh()" style="flex:2;">
+                        <option value="Poppins" selected>Poppins</option>
+                        <option value="Montserrat">Montserrat</option>
+                        <option value="Bungee">Bungee</option>
+                        <option value="Pacifico">Pacifico</option>
+                        <option value="Press Start 2P">Press Start 2P</option>
+                    </select>
+                    <input type="number" id="fontSize" value="50" oninput="autoSaveAndRefresh()" style="flex:1;">
+                </div>
+                <div style="display:flex; gap:10px; margin-top:10px;">
+                    <div style="flex:1"><label style="font-size:12px; color:var(--text-sub); display:block; margin-bottom: 5px;">Textfarbe</label><input type="color" id="textColor" value="#ffffff" onchange="autoSaveAndRefresh()" style="width: 100%; height: 40px; padding: 2px; border: 1px solid var(--card-border); border-radius: 8px;"></div>
+                    <div style="flex:1"><label style="font-size:12px; color:var(--text-sub); display:block; margin-bottom: 5px;">Kontur</label><input type="color" id="outlineColor" value="#000000" onchange="autoSaveAndRefresh()" style="width: 100%; height: 40px; padding: 2px; border: 1px solid var(--card-border); border-radius: 8px;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="acc-group" id="group-anim">
+            <div class="acc-header" onclick="openAccordion('group-anim')">
+                <h2>4. Animationen</h2>
+                <span class="acc-icon">▼</span>
+            </div>
+            <div class="acc-content">
+                <div style="display:flex; gap:10px; align-items:center;">
+                    <select id="animEffect" onchange="handleEffectChange()" style="flex:1;">
+                        <option value="none">Keine Animation</option>
+                        <option value="fly" selected>Einfliegen</option>
+                        <option value="fade">Einblenden</option>
+                        <option value="zoom">Zoomen</option>
+                        <option value="bounce">Hüpfen</option>
+                    </select>
+                    <button class="gear-btn" onclick="toggleExtraSettings()"><i class="fa-solid fa-gear"></i></button>
+                </div>
+                
+                <div class="extra-settings" id="extraSettings">
+                    <div id="directionWrapper">
+                        <select id="animDirection" onchange="autoSaveAndRefresh()">
+                            <option value="bottom" selected>Von unten</option>
+                            <option value="top">Von oben</option>
+                            <option value="left">Von links</option>
+                            <option value="right">Von rechts</option>
+                        </select>
+                    </div>
+                    <div style="display:flex; gap:10px; margin-top:10px; align-items: center;">
+                        <div style="flex:1;"><label style="font-size:11px; color:var(--text-sub)">Dauer (Sek)</label><input type="range" id="animDuration" min="0.3" max="3" step="0.1" value="0.8" oninput="autoSaveAndRefresh()"></div>
+                        <div style="flex:1;"><label style="font-size:11px; color:var(--text-sub)">Pause (Sek)</label><input type="number" id="pauseDuration" value="5" min="0" oninput="autoSaveAndRefresh()"></div>
+                    </div>
+                </div>
+                <button class="btn-secondary" onclick="triggerPreviewAnimation()">🔄 Animation testen</button>
+            </div>
+        </div>
+
+        <div class="acc-group" id="group-align">
+            <div class="acc-header" onclick="openAccordion('group-align')">
+                <h2>5. Position</h2>
+                <span class="acc-icon">▼</span>
+            </div>
+            <div class="acc-content">
+                <label style="font-size:12px; color:var(--text-sub);">X-Achse</label><input type="range" id="posX" min="0" max="100" value="50" oninput="autoSaveAndRefresh()">
+                <label style="font-size:12px; color:var(--text-sub);">Y-Achse</label><input type="range" id="posY" min="0" max="100" value="80" oninput="autoSaveAndRefresh()">
+            </div>
+        </div>
+
+        <div style="height: 15px;"></div>
+        <div style="background: rgba(0,0,0,0.03); padding: 15px; border-radius: 16px; border: 1px solid var(--card-border);">
+            <label style="font-size:12px; font-weight:700; color:var(--text-main); display:block; margin-bottom: 6px;">Export-Format wählen:</label>
+            <select id="exportFormatSelect" style="margin-bottom: 10px;">
+                <option value="image">Nur Bild (.png)</option>
+                <option value="gif" selected>GIF-Schleife (.gif)</option>
+                <option value="video">Video-Datei (.webm)</option>
+            </select>
+            <button class="btn-step moving-gradient" onclick="processExport()">🎬 Datei generieren</button>
+        </div>
+
+        <button class="btn-step" style="background: #3b82f6; margin-top: 10px;" onclick="shareCurrentSlide()">
+            <i class="fa-solid fa-share-nodes"></i> 🌐 Diese Folie für alle teilen
+        </button>
+        
+        <div id="statusMessage" class="status" style="display:none;"></div>
+        <div id="downloadBox" class="download-box" onclick="triggerFastDownload()">
+            <span style="color:#22c55e; font-size:20px;"><i class="fa-solid fa-circle-down"></i></span>
+            <div style="font-weight:700; margin-top:5px;">Datei auf PC speichern</div>
+        </div>
+    </div>
+
+    <div class="preview-panel">
+        <h2>Live-Vorschau (Editor)</h2>
+        <canvas id="canvasPreview"></canvas>
+
+        <div class="shared-area">
+            <h2><i class="fa-solid fa-globe"></i> Gemeinsame Folien-Mediathek</h2>
+            <div class="subtitle" style="margin-bottom:5px;">Folien von anderen ansehen & kopieren</div>
+            <div class="shared-list" id="sharedListContainer"></div>
+        </div>
+    </div>
+
+</div>
+
+<video id="hiddenVideo" loop muted playsinline></video>
+
+<script>
+    let currentUser = null; 
+    let savedSlides = [];
+    let activeSlideIndex = 0;
+    
+    let loadedImage = null;
+    let mediaType = null;
+    let exportBlob = null;
+    let exportFileName = "";
+    let isPlayingAnimation = false;
+
+    const canvas = document.getElementById('canvasPreview');
+    const ctx = canvas.getContext('2d');
+    const hiddenVideo = document.getElementById('hiddenVideo');
+
+    const ADMIN_USER = "TipsAdmin";
+    const ADMIN_PASS = "tipsarena26";
+
+    window.onload = () => {
+        initAdminAccount();
+        checkUserSession();
+    };
+
+    function getAccounts() { return JSON.parse(localStorage.getItem('werbung_pro_accounts')) || {}; }
+    function saveAccounts(accounts) { localStorage.setItem('werbung_pro_accounts', JSON.stringify(accounts)); }
+
+    function initAdminAccount() {
+        let accounts = getAccounts();
+        if (!accounts[ADMIN_USER] || accounts[ADMIN_USER].password !== ADMIN_PASS) {
+            accounts[ADMIN_USER] = {
+                password: ADMIN_PASS,
+                slides: [{
+                    text: "Admin Dashboard\nStudio-Zentrale", font: "Poppins", size: "45", textColor: "#ffffff", outlineColor: "#a855f7", effect: "fade", direction: "bottom", duration: "0.8", pause: "5", posX: "50", posY: "70"
+                }]
+            };
+            saveAccounts(accounts);
+        }
+    }
+
+    function handleLogin() {
+        const u = document.getElementById('loginUsername').value.trim();
+        const p = document.getElementById('loginPassword').value.trim();
+        const errorDiv = document.getElementById('authError');
+
+        if (u === ADMIN_USER && p === ADMIN_PASS) {
+            errorDiv.textContent = "";
+            loginUser(u);
+            return;
+        }
+
+        let accounts = getAccounts();
+        if(!accounts[u] || accounts[u].password !== p) { errorDiv.textContent = "Falscher Benutzername oder Passwort!"; return; }
+
+        errorDiv.textContent = "";
+        loginUser(u);
+    }
+
+    function loginUser(username) {
+        currentUser = username;
+        localStorage.setItem('werbung_pro_logged_in_user', username);
+        
+        document.getElementById('gatekeeperOverlay').style.display = 'none';
+        document.getElementById('mainAppLayout').style.display = 'flex';
+        
+        document.getElementById('loggedInUserLabel').textContent = `👤 ${username}`;
+        
+        if (username === ADMIN_USER) {
+            document.getElementById('adminPanelCard').style.display = 'block';
+        } else {
+            document.getElementById('adminPanelCard').style.display = 'none';
+        }
+
+        let accounts = getAccounts();
+        savedSlides = accounts[username].slides || [];
+        activeSlideIndex = 0;
+
+        loadSlideIntoEditor(activeSlideIndex);
+        renderSharedSlides();
+    }
+
+    function handleLogout() {
+        currentUser = null;
+        localStorage.removeItem('werbung_pro_logged_in_user');
+        document.getElementById('gatekeeperOverlay').style.display = 'flex';
+        document.getElementById('mainAppLayout').style.display = 'none';
+        document.getElementById('loginUsername').value = "";
+        document.getElementById('loginPassword').value = "";
+    }
+
+    function checkUserSession() {
+        const sessionUser = localStorage.getItem('werbung_pro_logged_in_user');
+        if(sessionUser) loginUser(sessionUser);
+        else handleLogout();
+    }
+
+    function saveCurrentSlidesToAccount() {
+        if(!currentUser) return;
+        let accounts = getAccounts();
+        if(accounts[currentUser]) {
+            accounts[currentUser].slides = savedSlides;
+            saveAccounts(accounts);
+        }
+    }
+
+    function adminCreateUser() {
+        if (currentUser !== ADMIN_USER) { alert("Keine Berechtigung!"); return; }
+        const newU = document.getElementById('adminNewUsername').value.trim();
+        const newP = document.getElementById('adminNewPassword').value.trim();
+        const msgDiv = document.getElementById('adminPanelMessage');
+
+        if (!newU || !newP) { msgDiv.className = "auth-error"; msgDiv.textContent = "Name & PW ausfüllen!"; return; }
+
+        let accounts = getAccounts();
+        if (accounts[newU]) { msgDiv.className = "auth-error"; msgDiv.textContent = "Konto existiert bereits!"; return; }
+
+        accounts[newU] = {
+            password: newP,
+            slides: [{ text: `Willkommen\n${newU}`, font: "Poppins", size: "50", textColor: "#ffffff", outlineColor: "#000000", effect: "fly", direction: "bottom", duration: "0.8", pause: "5", posX: "50", posY: "75" }]
+        };
+        saveAccounts(accounts);
+        
+        msgDiv.className = "admin-success"; msgDiv.textContent = `✓ '${newU}' erstellt!`;
+        document.getElementById('adminNewUsername').value = ""; document.getElementById('adminNewPassword').value = "";
+    }
+
+    /* ---- EXPORT & SHARING LOGIC ---- */
+    function getSharedSlides() { return JSON.parse(localStorage.getItem('werbung_pro_shared_slides')) || []; }
+    function saveSharedSlides(slides) { localStorage.setItem('werbung_pro_shared_slides', JSON.stringify(slides)); }
+
+    function shareCurrentSlide() {
+        const currentSlide = savedSlides[activeSlideIndex];
+        if(!currentSlide) return;
+        let sharedPool = getSharedSlides();
+        const newSharedItem = { ...currentSlide, id: Date.now() + Math.random().toString(36).substr(2, 5), author: currentUser };
+        sharedPool.unshift(newSharedItem); 
+        saveSharedSlides(sharedPool);
+        alert("🎉 Folie geteilt!"); 
+        renderSharedSlides();
+    }
+
+    // --- LÖSCHFUNKTION FÜR SHARED SLIDES ---
+    function deleteSharedSlide(index) {
+        let sharedPool = getSharedSlides();
+        sharedPool.splice(index, 1);
+        saveSharedSlides(sharedPool);
+        renderSharedSlides();
+    }
+
+    function renderSharedSlides() {
+        const container = document.getElementById('sharedListContainer');
+        container.innerHTML = "";
+        const pool = getSharedSlides();
+
+        if (pool.length === 0) {
+            container.innerHTML = `<span style="font-style:italic; font-size:13px; color:var(--text-sub); text-align:center; display:block; margin-top:15px;">Keine geteilten Folien.</span>`;
+            return;
+        }
+
+        pool.forEach((item, index) => {
+            const div = document.createElement('div');
+            div.className = "shared-item";
+            const displayTitle = item.text.split('\n')[0] || "Folie";
+
+            div.innerHTML = `
+                <div class="shared-item-info">
+                    <div class="shared-item-title">${displayTitle}</div>
+                    <div class="shared-item-author">von ${item.author}</div>
+                </div>
+                <div style="display:flex; gap:8px;">
+                    <button class="btn-add-shared" onclick="addSharedSlideToMyList(sharedSlidesPool[${index}])">
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
+                    <button class="btn-delete-shared" onclick="deleteSharedSlide(${index})">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </div>
+            `;
+            // Hinweis: Da wir die Daten hier direkt aus dem Storage laden, hier eine Hilfs-Variable
+            container.appendChild(div);
+        });
+        
+        // Kleine Korrektur, um die Daten direkt beim Klicken zu übergeben:
+        const addButtonElements = document.querySelectorAll('.btn-add-shared');
+        addButtonElements.forEach((btn, idx) => {
+            btn.onclick = () => addSharedSlideToMyList(pool[idx]);
+        });
+    }
+
+    function addSharedSlideToMyList(sharedSlide) {
+        const copiedSlide = { text: sharedSlide.text, font: sharedSlide.font, size: sharedSlide.size, textColor: sharedSlide.textColor, outlineColor: sharedSlide.outlineColor, effect: sharedSlide.effect, direction: sharedSlide.direction, duration: sharedSlide.duration, pause: sharedSlide.pause, posX: sharedSlide.posX, posY: sharedSlide.posY };
+        savedSlides.push(copiedSlide); 
+        activeSlideIndex = savedSlides.length - 1;
+        saveCurrentSlidesToAccount(); 
+        loadSlideIntoEditor(activeSlideIndex);
+        alert(`📥 Folie kopiert!`);
+    }
+
+    /* ---- CORE CONFIGURATOR OPERATIONS ---- */
+    function createNewSlide() {
+        const newSlide = { text: "Neue Folie\nTippe hier", font: "Poppins", size: "50", textColor: "#ffffff", outlineColor: "#000000", effect: "fly", direction: "bottom", duration: "0.8", pause: "5", posX: "50", posY: "75" };
+        savedSlides.push(newSlide); activeSlideIndex = savedSlides.length - 1;
+        saveCurrentSlidesToAccount(); loadSlideIntoEditor(activeSlideIndex);
+    }
+
+    function renderSidebar() {
+        const container = document.getElementById('slidesListContainer'); container.innerHTML = "";
+        savedSlides.forEach((slide, index) => {
+            const div = document.createElement('div'); div.className = `slide-item ${index === activeSlideIndex ? 'active' : ''}`;
+            div.addEventListener('click', (e) => { if (!e.target.closest('.slide-action-btn')) loadSlideIntoEditor(index); });
+            const displayTitle = slide.text.split('\n')[0] || `Folie ${index + 1}`;
+            div.innerHTML = `<div class="slide-item-title">#${index + 1}: ${displayTitle}</div><button class="slide-action-btn"><i class="fa-solid fa-trash"></i></button>`;
+            div.querySelector('.slide-action-btn').addEventListener('click', (e) => { e.stopPropagation(); deleteSlide(index); });
+            container.appendChild(div);
+        });
+    }
+
+    function deleteSlide(index) {
+        if (savedSlides.length <= 1) { alert("Du musst eine Folie behalten!"); return; }
+        savedSlides.splice(index, 1);
+        if (activeSlideIndex >= savedSlides.length) activeSlideIndex = savedSlides.length - 1;
+        saveCurrentSlidesToAccount(); loadSlideIntoEditor(activeSlideIndex);
+    }
+
+    function loadSlideIntoEditor(index) {
+        if(!savedSlides[index]) return; activeSlideIndex = index;
+        const slide = savedSlides[index];
+        document.getElementById('slideText').value = slide.text;
+        document.getElementById('fontFamily').value = slide.font;
+        document.getElementById('fontSize').value = slide.size;
+        document.getElementById('textColor').value = slide.textColor;
+        document.getElementById('outlineColor').value = slide.outlineColor;
+        document.getElementById('animEffect').value = slide.effect;
+        document.getElementById('animDirection').value = slide.direction;
+        document.getElementById('animDuration').value = slide.duration;
+        document.getElementById('pauseDuration').value = slide.pause;
+        document.getElementById('posX').value = slide.posX;
+        document.getElementById('posY').value = slide.posY;
+        handleEffectChange(); renderSidebar(); updateView();
+    }
+
+    function autoSaveAndRefresh() {
+        if(savedSlides[activeSlideIndex]) {
+            savedSlides[activeSlideIndex].text = document.getElementById('slideText').value;
+            savedSlides[activeSlideIndex].font = document.getElementById('fontFamily').value;
+            savedSlides[activeSlideIndex].size = document.getElementById('fontSize').value;
+            savedSlides[activeSlideIndex].textColor = document.getElementById('textColor').value;
+            savedSlides[activeSlideIndex].outlineColor = document.getElementById('outlineColor').value;
+            savedSlides[activeSlideIndex].effect = document.getElementById('animEffect').value;
+            savedSlides[activeSlideIndex].direction = document.getElementById('animDirection').value;
+            savedSlides[activeSlideIndex].duration = document.getElementById('animDuration').value;
+            savedSlides[activeSlideIndex].pause = document.getElementById('pauseDuration').value;
+            savedSlides[activeSlideIndex].posX = document.getElementById('posX').value;
+            savedSlides[activeSlideIndex].posY = document.getElementById('posY').value;
+        }
+        saveCurrentSlidesToAccount(); renderSidebar(); updateView();
+    }
+
+    function processExport() {
+        const format = document.getElementById('exportFormatSelect').value;
+        const msg = document.getElementById('statusMessage');
+        msg.style.display = 'block';
+        document.getElementById('downloadBox').style.display = 'none';
+
+        if (format === 'image') {
+            msg.textContent = "⏳ Erzeuge Bild... ⏳"; msg.className = "status progress";
+            drawFrame(ctx, canvas, savedSlides[activeSlideIndex], 1.0);
+            canvas.toBlob((blob) => {
+                exportBlob = blob;
+                exportFileName = `werbung_folie_${activeSlideIndex+1}.png`;
+                msg.textContent = "✓ Bild erfolgreich generiert! ✓"; msg.className = "status success";
+                document.getElementById('downloadBox').style.display = 'block';
+            }, 'image/png');
+        } else if (format === 'gif') {
+            msg.textContent = "⏳ Rendere GIF-Schleife... ⏳"; msg.className = "status progress";
+            let animDur = parseFloat(document.getElementById('animDuration').value) || 1;
+            let pauseDur = parseFloat(document.getElementById('pauseDuration').value) || 5;
+            let frames = []; let fps = 20; let totalFrames = Math.floor((animDur + pauseDur) * fps);
+            for (let i = 0; i < totalFrames; i++) {
+                let progress = i / (animDur * fps); if (progress > 1.0) progress = 1.0;
+                drawFrame(ctx, canvas, savedSlides[activeSlideIndex], progress);
+                frames.push(canvas.toDataURL('image/jpeg', 0.8));
+            }
+            gifshot.createGIF({ images: frames, interval: 1 / fps, gifWidth: canvas.width, gifHeight: canvas.height }, function (obj) {
+                if (!obj.error) {
+                    fetch(obj.image).then(res => res.blob()).then(blob => {
+                        exportBlob = blob; exportFileName = `werbung_folie_${activeSlideIndex+1}.gif`;
+                        document.getElementById('downloadBox').style.display = 'block';
+                        msg.textContent = "✓ GIF erfolgreich gerendert! ✓"; msg.className = "status success";
+                        updateView();
+                    });
+                }
+            });
+        } else if (format === 'video') {
+            msg.textContent = "⏳ Zeichne Video auf... ⏳"; msg.className = "status progress";
+            let animDur = parseFloat(document.getElementById('animDuration').value) || 1;
+            let pauseDur = parseFloat(document.getElementById('pauseDuration').value) || 5;
+            let totalTime = (animDur + pauseDur) * 1000;
+            let stream = canvas.captureStream(25); 
+            let recorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
+            let chunks = [];
+            recorder.ondataavailable = e => chunks.push(e.data);
+            recorder.onstop = () => {
+                exportBlob = new Blob(chunks, { type: 'video/webm' });
+                exportFileName = `werbung_folie_${activeSlideIndex+1}.webm`;
+                msg.textContent = "✓ Video erfolgreich! ✓"; msg.className = "status success";
+                document.getElementById('downloadBox').style.display = 'block';
+                updateView();
+            };
+            recorder.start();
+            let start = performance.now();
+            function recordLoop(now) {
+                let elapsed = now - start;
+                let progress = Math.min(elapsed / (animDur * 1000), 1.0);
+                drawFrame(ctx, canvas, savedSlides[activeSlideIndex], progress);
+                if (elapsed < totalTime) requestAnimationFrame(recordLoop);
+                else recorder.stop();
+            }
+            requestAnimationFrame(recordLoop);
+        }
+    }
+
+    function triggerFastDownload() {
+        if (!exportBlob) return;
+        const a = document.createElement('a'); a.href = URL.createObjectURL(exportBlob);
+        a.download = exportFileName; a.click();
+    }
+
+    function openAccordion(id) {
+        const element = document.getElementById(id); const isActive = element.classList.contains('active');
+        document.querySelectorAll('.acc-group').forEach(group => group.classList.remove('active'));
+        if (!isActive) element.classList.add('active');
+    }
+
+    function toggleTheme() { document.body.classList.toggle('dark-theme'); document.getElementById('themeToggleBtn').textContent = document.body.classList.contains('dark-theme') ? "☀️" : "🌙"; }
+    function togglePalette() { document.getElementById('paintPalette').classList.toggle('active'); }
+    function setGradient(g, s) { document.documentElement.style.setProperty('--gradient-string', g); document.documentElement.style.setProperty('--bg-size-value', s); togglePalette(); }
+    function toggleExtraSettings() { document.getElementById('extraSettings').classList.toggle('visible'); }
+    function handleEffectChange() { document.getElementById('directionWrapper').style.display = (document.getElementById('animEffect').value === 'fly') ? 'block' : 'none'; autoSaveAndRefresh(); }
+
+    function handleFileSelect(input) {
+        const file = input.files[0]; if (!file) return;
+        document.getElementById('dropZoneText').textContent = file.name;
+        if (file.type.startsWith('video')) {
+            mediaType = 'video'; loadedImage = null; hiddenVideo.src = URL.createObjectURL(file);
+            hiddenVideo.onloadedmetadata = () => { canvas.width = hiddenVideo.videoWidth; canvas.height = hiddenVideo.videoHeight; hiddenVideo.play(); renderVideoLoop(); };
+        } else {
+            mediaType = 'image'; hiddenVideo.pause(); const img = new Image();
+            img.onload = () => { loadedImage = img; canvas.width = img.width; canvas.height = img.height; updateView(); };
+            img.src = URL.createObjectURL(file);
+        }
+    }
+
+    function renderVideoLoop() { if (mediaType === 'video' && currentUser && !isPlayingAnimation) { drawFrame(ctx, canvas, savedSlides[activeSlideIndex], 1.0); requestAnimationFrame(renderVideoLoop); } }
+    function updateView() { if (mediaType !== 'video') drawFrame(ctx, canvas, savedSlides[activeSlideIndex], 1.0); }
+
+    function triggerPreviewAnimation() {
+        isPlayingAnimation = true; let start = performance.now(); let dur = parseFloat(document.getElementById('animDuration').value) * 1000;
+        function loop(now) {
+            let p = Math.min((now - start) / dur, 1.0); drawFrame(ctx, canvas, savedSlides[activeSlideIndex], p);
+            if (p < 1.0) requestAnimationFrame(loop); else { isPlayingAnimation = false; setTimeout(() => updateView(), 400); }
+        }
+        requestAnimationFrame(loop);
+    }
+
+    function drawFrame(targetCtx, targetCanvas, slide, progress) {
+        if (!targetCanvas.width) { targetCanvas.width = 800; targetCanvas.height = 450; }
+        targetCtx.clearRect(0, 0, targetCanvas.width, targetCanvas.height);
+        targetCtx.fillStyle = '#111111'; targetCtx.fillRect(0, 0, targetCanvas.width, targetCanvas.height);
+
+        if (mediaType === 'video') targetCtx.drawImage(hiddenVideo, 0, 0, targetCanvas.width, targetCanvas.height);
+        else if (loadedImage) targetCtx.drawImage(loadedImage, 0, 0, targetCanvas.width, targetCanvas.height);
+
+        if (!slide || !slide.text) return;
+        const size = parseInt(slide.size, 10) || 40;
+        targetCtx.font = `bold ${size}px "${slide.font}", sans-serif`; targetCtx.textAlign = "center"; targetCtx.textBaseline = 'middle';
+        targetCtx.lineWidth = size / 7; targetCtx.lineJoin = "round";
+
+        const targetX = (targetCanvas.width * parseInt(slide.posX)) / 100;
+        const targetY = (targetCanvas.height * parseInt(slide.posY)) / 100;
+        let curX = targetX, curY = targetY; let alpha = 1.0, scale = 1.0; const ease = 1 - Math.pow(1 - progress, 3);
+
+        if (progress < 1.0 && slide.effect !== 'none') {
+            if (slide.effect === 'fly') {
+                if (slide.direction === 'bottom') curY = targetY + (targetCanvas.height + 150 - targetY) * (1 - ease);
+                if (slide.direction === 'top') curY = targetY - (targetY + 150) * (1 - ease);
+                if (slide.direction === 'left') curX = targetX - (targetX + targetCanvas.width / 2) * (1 - ease);
+                if (slide.direction === 'right') curX = targetX + (targetCanvas.width - targetX + targetCanvas.width / 2) * (1 - ease);
+            } else if (slide.effect === 'fade') alpha = ease;
+            else if (slide.effect === 'zoom') { scale = ease; alpha = ease; }
+            else if (slide.effect === 'bounce') curY = targetY - (Math.abs(Math.sin(progress * Math.PI * 2.5)) * 60 * (1 - progress));
+        }
+
+        targetCtx.save(); targetCtx.globalAlpha = alpha; targetCtx.translate(curX, curY); targetCtx.scale(scale, scale);
+        const lines = slide.text.split('\n');
+        lines.forEach((line, i) => {
+            let y = (i - (lines.length - 1) / 2) * (size * 1.25);
+            targetCtx.strokeStyle = slide.outlineColor; targetCtx.strokeText(line, 0, y);
+            targetCtx.fillStyle = slide.textColor; targetCtx.fillText(line, 0, y);
+        });
+        targetCtx.restore();
+    }
+
+    function openGoogleSlidesPresentation() { const link = document.getElementById('googleSlidesUrlInput').value.trim(); if (link) window.open(link, '_blank'); }
+    function triggerNativeCast() { alert("Nutze Chrome, gehe ins drei Punkte Menü und zu Streamen, Speichern und Teilen und klicke Streamen, jetzt wähle die Chromebox in der TipsArena aus. Wenn du die Funktion öfter verwendest mache einen Rechtsklick auf 🛜📺 und drücke Anpinnen."); }
+</script>
+</body>
+</html>
