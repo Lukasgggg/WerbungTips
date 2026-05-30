@@ -55,7 +55,59 @@
         .login-card {
             background: var(--card-bg); border: 1px solid var(--card-border);
             padding: 35px; border-radius: 28px; box-shadow: 0 20px 50px rgba(0,0,0,0.1);
-            width: 100%; max-width: 400px; text-align: center; backdrop-filter: blur(20px);
+            width: 100%; max-width: 440px; text-align: center; backdrop-filter: blur(20px);
+        }
+
+        /* Profile Schnellauswahl Styling */
+        .saved-profiles-section {
+            margin-bottom: 20px;
+            text-align: left;
+            background: rgba(0, 0, 0, 0.03);
+            padding: 12px;
+            border-radius: 16px;
+            border: 1px solid var(--card-border);
+        }
+        .profiles-flex {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+        }
+        .profile-badge {
+            background: var(--input-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 6px 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+        }
+        .profile-badge:hover {
+            transform: translateY(-1px);
+            border-color: var(--accent);
+        }
+        .profile-badge span {
+            font-weight: 600;
+            font-size: 13px;
+        }
+        .remove-profile-btn {
+            background: none;
+            border: none;
+            color: var(--text-sub);
+            font-size: 16px;
+            cursor: pointer;
+            padding: 0 2px;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .remove-profile-btn:hover {
+            color: var(--delete-color);
         }
 
         #mainAppLayout {
@@ -83,22 +135,62 @@
         .shared-list { display: flex; flex-direction: column; gap: 10px; max-height: 250px; overflow-y: auto; margin-top: 12px; padding-right: 5px; }
         .shared-item { background: var(--input-bg); border: 1px solid var(--card-border); padding: 12px 15px; border-radius: 14px; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
         .shared-item-info { display: flex; flex-direction: column; gap: 2px; overflow: hidden; }
-        .shared-item-title { font-weight: 600; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px; color: var(--text-main); }
+        .shared-item-title { font-weight: 600; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 260px; color: var(--text-main); }
         .shared-item-author { font-size: 11px; color: var(--accent); font-weight: 700; display: flex; align-items: center; gap: 4px; }
         .btn-add-shared { background: rgba(59, 130, 246, 0.1); border: none; color: var(--accent); padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; }
         .btn-add-shared:hover { background: var(--accent); color: white; }
-        .btn-delete-shared { background: rgba(239, 68, 68, 0.1); border: none; color: var(--delete-color); padding: 6px 10px; border-radius: 8px; font-size: 12px; cursor: pointer; }
-        .btn-delete-shared:hover { background: var(--delete-color); color: white; }
 
-        .admin-card { border: 2px solid var(--admin-color) !important; background: rgba(168, 85, 247, 0.04) !important; }
+        .admin-box-embedded { border-radius: 16px; padding: 15px; margin-top: 5px; box-sizing: border-box; color: white; }
 
+        /* Admin Management Liste */
+        .admin-user-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 10px;
+            max-height: 200px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+        .admin-user-row {
+            background: rgba(0,0,0,0.04);
+            padding: 8px 12px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .admin-user-name {
+            font-size: 13px;
+            font-weight: 600;
+        }
+        .admin-action-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px 6px;
+            font-size: 12px;
+            border-radius: 4px;
+        }
+        .admin-action-btn.edit { color: var(--accent); }
+        .admin-action-btn.delete { color: var(--delete-color); }
+
+        /* HEADER & MENÜS */
         .top-menu-container { position: fixed; top: 15px; right: 15px; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; z-index: 1000; pointer-events: none; }
+        .top-left-container { position: fixed; top: 15px; left: 15px; display: flex; flex-direction: column; align-items: flex-start; gap: 10px; z-index: 1000; pointer-events: none; }
         .button-row { display: flex; gap: 12px; pointer-events: auto; }
         .menu-btn { background: var(--card-bg); border: 1px solid var(--card-border); color: var(--text-main); width: 44px; height: 44px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
 
         .paint-palette { background: var(--card-bg); border: 1px solid var(--card-border); padding: 14px; border-radius: 20px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); opacity: 0; transform: translateY(-10px); pointer-events: none; transition: all 0.3s ease; width: max-content; }
         .paint-palette.active { opacity: 1; transform: translateY(0); pointer-events: auto; }
-        .color-swatch { width: 38px; height: 38px; border-radius: 50%; cursor: pointer; border: 2px solid white; }
+        .color-swatch { width: 38px; height: 38px; border-radius: 50%; cursor: pointer; border: 2px solid white; box-shadow: 0 2px 6px rgba(0,0,0,0.15); }
+
+        /* PROFIL DROPDOWN OVERLAY */
+        .profile-dropdown { background: var(--card-bg); border: 1px solid var(--card-border); padding: 20px; border-radius: 24px; box-shadow: 0 15px 45px rgba(0,0,0,0.2); opacity: 0; transform: translateY(-10px); pointer-events: none; transition: all 0.3s ease; width: 320px; backdrop-filter: blur(20px); max-height: 85vh; overflow-y: auto; }
+        .profile-dropdown.active { opacity: 1; transform: translateY(0); pointer-events: auto; }
+        .profile-section { margin-bottom: 15px; padding-bottom: 12px; border-bottom: 1px solid var(--card-border); }
+        .profile-section:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+        .profile-section h3 { font-size: 13px; margin: 0 0 8px 0; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.5px; }
 
         .moving-gradient { background: var(--gradient-string); background-size: var(--bg-size-value); animation: flowGradient 25s linear infinite; }
         @keyframes flowGradient { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
@@ -134,8 +226,8 @@
         .download-box { margin-top: 15px; background: rgba(34, 197, 94, 0.15); border: 2px solid #22c55e; border-radius: 14px; padding: 15px; text-align: center; display: none; cursor: pointer; }
         #hiddenVideo { display: none; }
 
-        .auth-error { color: var(--delete-color); font-size: 12px; margin-top: 8px; font-weight: 600; text-align: center; }
-        .admin-success { color: #166534; font-size: 12px; margin-top: 8px; font-weight: 600; text-align: center; }
+        .auth-error { color: #ef4444; font-size: 12px; margin-top: 8px; font-weight: 600; text-align: center; }
+        .admin-success { color: #10b981; font-size: 12px; margin-top: 8px; font-weight: 600; text-align: center; }
     </style>
 </head>
 <body>
@@ -143,7 +235,12 @@
 <div id="gatekeeperOverlay">
     <div class="login-card">
         <h1 style="font-size: 22px; justify-content: center; margin-bottom: 5px;"><i class="fa-solid fa-lock" style="color: var(--accent);"></i> Werbung Pro</h1>
-        <div class="subtitle" style="margin-bottom: 25px;">Bitte logge dich ein, um das Studio zu öffnen</div>
+        <div class="subtitle" style="margin-bottom: 20px;">Bitte logge dich ein, um das Studio zu öffnen</div>
+        
+        <div class="saved-profiles-section" id="savedProfilesSection" style="display: none;">
+            <label style="font-size: 11px; font-weight: 700; color: var(--text-sub); text-transform: uppercase;">Zuletzt angemeldet:</label>
+            <div class="profiles-flex" id="savedProfilesContainer"></div>
+        </div>
         
         <div style="display: flex; flex-direction: column; gap: 10px;">
             <input type="text" id="loginUsername" placeholder="Benutzername">
@@ -158,6 +255,85 @@
 
 <div id="mainAppLayout">
 
+    <div class="top-left-container">
+        <div class="button-row">
+            <button class="menu-btn" onclick="toggleProfileDropdown()">👤</button>
+        </div>
+        <div class="profile-dropdown" id="profileDropdown">
+            <div class="profile-section">
+                <h3>Bearbeiter</h3>
+                <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.04); padding: 6px 10px; border-radius: 8px;">
+                    <span id="profileUserLabel" style="font-size: 13px; font-weight: 700; color: var(--text-main);">👤 Gast</span>
+                    <span onclick="handleLogout()" style="color: var(--delete-color); font-size: 12px; font-weight: 700; cursor: pointer;"><i class="fa-solid fa-right-from-bracket"></i> Abmelden</span>
+                </div>
+            </div>
+            
+            <div class="profile-section" id="adminProfileSection" style="display: none;">
+                <h3><i class="fa-solid fa-user-shield"></i> Admin-Verwaltung</h3>
+                <div class="admin-box-embedded moving-gradient">
+                    <div style="font-size: 11px; margin-bottom: 8px; font-weight: 600; text-transform: uppercase;">Neues Konto anlegen</div>
+                    <div style="display: flex; flex-direction: column; gap: 6px;">
+                        <input type="text" id="adminNewUsername" placeholder="Benutzername" style="padding: 6px; font-size: 12px; color: #000; background: #fff;">
+                        <input type="password" id="adminNewPassword" placeholder="Passwort vergeben" style="padding: 6px; font-size: 12px; color: #000; background: #fff;">
+                        <button class="btn-step" style="background: rgba(0, 0, 0, 0.6); padding: 8px; font-size: 12px; color: #fff;" onclick="adminCreateUser()">
+                            <i class="fa-solid fa-user-plus"></i> Konto erstellen
+                        </button>
+                        <div id="adminPanelMessage"></div>
+                    </div>
+                </div>
+                
+                <div style="font-size: 11px; font-weight: 700; color: var(--text-sub); text-transform: uppercase; margin-top: 15px; margin-bottom: 5px;">Alle registrierten Konten:</div>
+                <div class="admin-user-list" id="adminUserListContainer"></div>
+            </div>
+
+            <div class="profile-section">
+                <h3>Präsentations-Links</h3>
+                <div style="display:flex; flex-direction:column; gap:6px;">
+                    <div>
+                        <label style="font-size:10px; color:var(--text-sub); font-weight:600;">Link Diashow (Start):</label>
+                        <input type="text" id="profileLiveUrl" oninput="saveProfileLinks()" style="padding:6px; font-size:12px;">
+                    </div>
+                    <div>
+                        <label style="font-size:10px; color:var(--text-sub); font-weight:600;">Link Präsentation Bearbeiten:</label>
+                        <input type="text" id="profileEditUrl" oninput="saveProfileLinks()" style="padding:6px; font-size:12px;">
+                    </div>
+                </div>
+            </div>
+            <div class="profile-section">
+                <h3>Standardeinstellungen</h3>
+                <div style="display:flex; flex-direction:column; gap:6px;">
+                    <div>
+                        <label style="font-size:10px; color:var(--text-sub); font-weight:600;">Schriftart:</label>
+                        <select id="defFont" onchange="saveProfileDefaults()" style="padding:6px; font-size:12px;">
+                            <option value="Poppins">Poppins</option>
+                            <option value="Montserrat">Montserrat</option>
+                            <option value="Bungee">Bungee</option>
+                            <option value="Pacifico">Pacifico</option>
+                            <option value="Press Start 2P">Press Start 2P</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label style="font-size:10px; color:var(--text-sub); font-weight:600;">Größe & Farbe:</label>
+                        <div style="display:flex; gap:4px;">
+                            <input type="number" id="defSize" oninput="saveProfileDefaults()" style="padding:6px; font-size:12px; flex:1;">
+                            <input type="color" id="defColor" onchange="saveProfileDefaults()" style="padding:0; width:35px; height:32px;">
+                        </div>
+                    </div>
+                    <div>
+                        <label style="font-size:10px; color:var(--text-sub); font-weight:600;">Animation:</label>
+                        <select id="defEffect" onchange="saveProfileDefaults()" style="padding:6px; font-size:12px;">
+                            <option value="none">Keine</option>
+                            <option value="fly">Einfliegen</option>
+                            <option value="fade">Einblenden</option>
+                            <option value="zoom">Zoomen</option>
+                            <option value="bounce">Hüpfen</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="top-menu-container">
         <div class="button-row">
             <button class="menu-btn" onclick="togglePalette()">🎨</button>
@@ -167,6 +343,13 @@
             <div class="color-swatch" style="background: linear-gradient(45deg, #ff0055, #f97316, #eab308, #22c55e, #3b82f6, #9333ea, #ff0055);" onclick="setGradient('linear-gradient(45deg, #ff0055, #f97316, #eab308, #22c55e, #3b82f6, #9333ea, #ff0055)', '600% 600%')"></div>
             <div class="color-swatch" style="background: linear-gradient(45deg, #3b82f6, #8b5cf6, #ec4899, #3b82f6);" onclick="setGradient('linear-gradient(45deg, #3b82f6, #8b5cf6, #ec4899, #3b82f6)', '300% 300%')"></div>
             <div class="color-swatch" style="background: linear-gradient(45deg, #f59e0b, #ef4444, #d946ef, #f59e0b);" onclick="setGradient('linear-gradient(45deg, #f59e0b, #ef4444, #d946ef, #f59e0b)', '400% 400%')"></div>
+            <div class="color-swatch" style="background: linear-gradient(45deg, #06b6d4, #3b82f6, #0ea5e9, #06b6d4);" onclick="setGradient('linear-gradient(45deg, #06b6d4, #3b82f6, #0ea5e9, #06b6d4)', '300% 300%')"></div>
+            <div class="color-swatch" style="background: linear-gradient(45deg, #10b981, #84cc16, #22c55e, #10b981);" onclick="setGradient('linear-gradient(45deg, #10b981, #84cc16, #22c55e, #10b981)', '300% 300%')"></div>
+            <div class="color-swatch" style="background: linear-gradient(45deg, #6366f1, #a855f7, #4f46e5, #6366f1);" onclick="setGradient('linear-gradient(45deg, #6366f1, #a855f7, #4f46e5, #6366f1)', '400% 400%')"></div>
+            <div class="color-swatch" style="background: linear-gradient(45deg, #0284c7, #10b981, #6366f1, #0284c7);" onclick="setGradient('linear-gradient(45deg, #0284c7, #10b981, #6366f1, #0284c7)', '500% 500%')"></div>
+            <div class="color-swatch" style="background: linear-gradient(45deg, #7f1d1d, #ef4444, #f97316, #7f1d1d);" onclick="setGradient('linear-gradient(45deg, #7f1d1d, #ef4444, #f97316, #7f1d1d)', '300% 300%')"></div>
+            <div class="color-swatch" style="background: linear-gradient(45deg, #1e1b4b, #eab308, #312e81, #1e1b4b);" onclick="setGradient('linear-gradient(45deg, #1e1b4b, #eab308, #312e81, #1e1b4b)', '400% 400%')"></div>
+            <div class="color-swatch" style="background: linear-gradient(45deg, #f472b6, #38bdf8, #f472b6, #38bdf8);" onclick="setGradient('linear-gradient(45deg, #f472b6, #38bdf8, #f472b6, #38bdf8)', '300% 300%')"></div>
         </div>
     </div>
 
@@ -175,17 +358,15 @@
             <h2><i class="fa-solid fa-play"></i> Start & Übertragung</h2>
             <div class="subtitle">Präsentation live abspielen</div>
             
-            <div style="margin-bottom: 12px;">
-                <label style="font-size: 11px; color: var(--text-sub); display: block; margin-bottom: 4px; font-weight: 600;">Google Slides Link:</label>
-                <input type="text" id="googleSlidesUrlInput" value="https://docs.google.com/presentation/d/e/2PACX-1vQYSDiNWgoUySOYEu1qDTetowoaZc7hbNeWHeG8gMveqpJRoWj_qr9QNpmiwHGo1AR9n80qi9nXCbm8/pub?start=true&loop=true&delayms=10000">
-            </div>
-
             <div style="display: flex; flex-direction: column; gap: 10px;">
                 <button class="btn-step moving-gradient" onclick="openGoogleSlidesPresentation()">
                     <i class="fa-solid fa-arrow-up-right-from-square"></i> 📺 Diashow starten
                 </button>
+                <button class="btn-step" style="background: #eab308;" onclick="openGoogleSlidesEditor()">
+                    <i class="fa-solid fa-pen-to-square"></i> 📝 Präsentation bearbeiten
+                </button>
                 <button class="btn-secondary" style="margin-top:0; padding:12px;" onclick="triggerNativeCast()">
-                    <i class="fa-solid fa-wifi"></i> 🌐 Tutorial in Google Chrome zum Box verbinden (Cast) 🌐
+                    <i class="fa-solid fa-wifi"></i> 🌐 Chrome Cast Box verbinden
                 </button>
             </div>
         </div>
@@ -195,28 +376,10 @@
             <div class="subtitle" id="slidesCardSubtitle">Deine persönlichen Folien</div>
             
             <div id="protectedSlidesArea">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; background: rgba(0,0,0,0.04); padding: 6px 10px; border-radius: 8px;">
-                    <span id="loggedInUserLabel" style="font-size: 13px; font-weight: 700; color: var(--text-main);">👤 Bearbeiter</span>
-                    <span onclick="handleLogout()" style="color: var(--delete-color); font-size: 12px; font-weight: 700; cursor: pointer;"><i class="fa-solid fa-right-from-bracket"></i> Abmelden</span>
-                </div>
                 <button class="btn-step" style="background: #10b981; padding: 10px; font-size: 14px;" onclick="createNewSlide()">
                     <i class="fa-solid fa-plus"></i> Neue Folie hinzufügen
                 </button>
                 <div class="slides-list" id="slidesListContainer"></div>
-            </div>
-        </div>
-
-        <div class="sidebar-card admin-card" id="adminPanelCard" style="display: none;">
-            <h2><i class="fa-solid fa-user-shield" style="color: var(--admin-color);"></i> Admin-Verwaltung</h2>
-            <div class="subtitle">Neues Konto anlegen</div>
-            
-            <div style="display: flex; flex-direction: column; gap: 8px;">
-                <input type="text" id="adminNewUsername" placeholder="Neuer Benutzername">
-                <input type="password" id="adminNewPassword" placeholder="Passwort vergeben">
-                <button class="btn-step" style="background: var(--admin-color); padding: 8px; font-size: 13px;" onclick="adminCreateUser()">
-                    <i class="fa-solid fa-user-plus"></i> Konto erstellen
-                </button>
-                <div id="adminPanelMessage"></div>
             </div>
         </div>
     </div>
@@ -368,9 +531,11 @@
 
     const ADMIN_USER = "TipsAdmin";
     const ADMIN_PASS = "tipsarena26";
+    const DEFAULT_EDIT_URL = "https://docs.google.com/presentation/d/17bytELuo4LFXibuZPoVJTkyydX_he-uGQsvCBL8hDjs/edit?slide=id.g3ed1b06c927_0_0#slide=id.g3ed1b06c927_0_0";
 
     window.onload = () => {
         initAdminAccount();
+        renderSavedProfiles();
         checkUserSession();
     };
 
@@ -382,12 +547,82 @@
         if (!accounts[ADMIN_USER] || accounts[ADMIN_USER].password !== ADMIN_PASS) {
             accounts[ADMIN_USER] = {
                 password: ADMIN_PASS,
+                liveUrl: "https://docs.google.com/presentation/d/e/2PACX-1vQYSDiNWgoUySOYEu1qDTetowoaZc7hbNeWHeG8gMveqpJRoWj_qr9QNpmiwHGo1AR9n80qi9nXCbm8/pub?start=true&loop=true&delayms=10000",
+                editUrl: DEFAULT_EDIT_URL,
+                defaults: { font: "Poppins", size: "45", textColor: "#ffffff", outlineColor: "#a855f7", effect: "fade" },
                 slides: [{
-                    text: "Admin Dashboard\nStudio-Zentrale", font: "Poppins", size: "45", textColor: "#ffffff", outlineColor: "#a855f7", effect: "fade", direction: "bottom", duration: "0.8", pause: "5", posX: "50", posY: "70"
+                    text: "Admin Dashboard\nStudio-Zentrale", font: "Poppins", size: "45", textColor: "#ffffff", outlineColor: "#a855f7", effect: "fade", direction: "bottom", duration: "0.8", pause: "5", posX: "50", posY: "70", mediaData: null, mediaType: null
                 }]
             };
             saveAccounts(accounts);
         }
+    }
+
+    function getSavedProfiles() {
+        try {
+            const data = localStorage.getItem('werbung_pro_saved_profiles');
+            return data ? JSON.parse(data) : [];
+        } catch (e) {
+            return [];
+        }
+    }
+
+    function saveSavedProfiles(profiles) {
+        localStorage.setItem('werbung_pro_saved_profiles', JSON.stringify(profiles));
+    }
+
+    function rememberProfile(username) {
+        let profiles = getSavedProfiles();
+        if (!profiles.includes(username)) {
+            profiles.push(username);
+            saveSavedProfiles(profiles);
+        }
+        renderSavedProfiles();
+    }
+
+    function renderSavedProfiles() {
+        const profiles = getSavedProfiles();
+        const section = document.getElementById('savedProfilesSection');
+        const container = document.getElementById('savedProfilesContainer');
+        
+        if (profiles.length === 0) {
+            section.style.display = 'none';
+            return;
+        }
+        
+        section.style.display = 'block';
+        container.innerHTML = "";
+        
+        profiles.forEach(username => {
+            const badge = document.createElement('div');
+            badge.className = "profile-badge";
+            
+            badge.onclick = (e) => {
+                if (e.target.closest('.remove-profile-btn')) return;
+                document.getElementById('loginUsername').value = username;
+                document.getElementById('loginPassword').value = "";
+                document.getElementById('loginPassword').focus();
+            };
+            
+            badge.innerHTML = `
+                <span>👤 ${username}</span>
+                <button class="remove-profile-btn" title="Nur aus Ansicht entfernen">×</button>
+            `;
+            
+            badge.querySelector('.remove-profile-btn').onclick = (e) => {
+                e.stopPropagation();
+                removeProfileFromView(username);
+            };
+            
+            container.appendChild(badge);
+        });
+    }
+
+    function removeProfileFromView(username) {
+        let profiles = getSavedProfiles();
+        profiles = profiles.filter(p => p !== username);
+        saveSavedProfiles(profiles);
+        renderSavedProfiles();
     }
 
     function handleLogin() {
@@ -397,6 +632,7 @@
 
         if (u === ADMIN_USER && p === ADMIN_PASS) {
             errorDiv.textContent = "";
+            rememberProfile(u);
             loginUser(u);
             return;
         }
@@ -405,6 +641,7 @@
         if(!accounts[u] || accounts[u].password !== p) { errorDiv.textContent = "Falscher Benutzername oder Passwort!"; return; }
 
         errorDiv.textContent = "";
+        rememberProfile(u);
         loginUser(u);
     }
 
@@ -414,17 +651,28 @@
         
         document.getElementById('gatekeeperOverlay').style.display = 'none';
         document.getElementById('mainAppLayout').style.display = 'flex';
-        
-        document.getElementById('loggedInUserLabel').textContent = `👤 ${username}`;
+        document.getElementById('profileUserLabel').textContent = `👤 ${username}`;
         
         if (username === ADMIN_USER) {
-            document.getElementById('adminPanelCard').style.display = 'block';
+            document.getElementById('adminProfileSection').style.display = 'block';
+            renderAdminUserList();
         } else {
-            document.getElementById('adminPanelCard').style.display = 'none';
+            document.getElementById('adminProfileSection').style.display = 'none';
         }
 
         let accounts = getAccounts();
-        savedSlides = accounts[username].slides || [];
+        let userAcc = accounts[username];
+        
+        document.getElementById('profileLiveUrl').value = userAcc.liveUrl || "https://docs.google.com/presentation/d/e/2PACX-1vQYSDiNWgoUySOYEu1qDTetowoaZc7hbNeWHeG8gMveqpJRoWj_qr9QNpmiwHGo1AR9n80qi9nXCbm8/pub?start=true&loop=true&delayms=10000";
+        document.getElementById('profileEditUrl').value = userAcc.editUrl || DEFAULT_EDIT_URL;
+        
+        let defs = userAcc.defaults || { font: "Poppins", size: "50", textColor: "#ffffff", outlineColor: "#000000", effect: "fly" };
+        document.getElementById('defFont').value = defs.font;
+        document.getElementById('defSize').value = defs.size;
+        document.getElementById('defColor').value = defs.textColor;
+        document.getElementById('defEffect').value = defs.effect;
+
+        savedSlides = userAcc.slides || [];
         activeSlideIndex = 0;
 
         loadSlideIntoEditor(activeSlideIndex);
@@ -434,16 +682,113 @@
     function handleLogout() {
         currentUser = null;
         localStorage.removeItem('werbung_pro_logged_in_user');
+        
         document.getElementById('gatekeeperOverlay').style.display = 'flex';
         document.getElementById('mainAppLayout').style.display = 'none';
+        
         document.getElementById('loginUsername').value = "";
         document.getElementById('loginPassword').value = "";
+        document.getElementById('slideText').value = "";
+        
+        document.getElementById('profileDropdown').classList.remove('active');
+        loadedImage = null;
+        mediaType = null;
+        hiddenVideo.src = "";
+        renderSavedProfiles();
     }
 
     function checkUserSession() {
         const sessionUser = localStorage.getItem('werbung_pro_logged_in_user');
         if(sessionUser) loginUser(sessionUser);
         else handleLogout();
+    }
+
+    function renderAdminUserList() {
+        const container = document.getElementById('adminUserListContainer');
+        container.innerHTML = "";
+        let accounts = getAccounts();
+        
+        Object.keys(accounts).forEach(username => {
+            const row = document.createElement('div');
+            row.className = "admin-user-row";
+            
+            row.innerHTML = `
+                <span class="admin-user-name">${username} ${username === ADMIN_USER ? '(Admin)' : ''}</span>
+                <div>
+                    <button class="admin-action-btn edit" title="Benutzername ändern"><i class="fa-solid fa-user-pen"></i></button>
+                    <button class="admin-action-btn delete" title="Konto komplett löschen" ${username === ADMIN_USER ? 'disabled' : ''}><i class="fa-solid fa-user-minus"></i></button>
+                </div>
+            `;
+            
+            row.querySelector('.edit').onclick = () => adminEditUser(username);
+            if (username !== ADMIN_USER) {
+                row.querySelector('.delete').onclick = () => adminDeleteUser(username);
+            }
+            
+            container.appendChild(row);
+        });
+    }
+
+    function adminEditUser(oldUsername) {
+        let newUsername = prompt(`Gib einen neuen Benutzernamen für '${oldUsername}' ein:`, oldUsername);
+        if (!newUsername || newUsername.trim() === "" || newUsername.trim() === oldUsername) return;
+        newUsername = newUsername.trim();
+        
+        let accounts = getAccounts();
+        if (accounts[newUsername]) {
+            alert("Dieser Benutzername existiert bereits!");
+            return;
+        }
+        
+        accounts[newUsername] = accounts[oldUsername];
+        delete accounts[oldUsername];
+        saveAccounts(accounts);
+        
+        let profiles = getSavedProfiles();
+        if (profiles.includes(oldUsername)) {
+            profiles = profiles.map(p => p === oldUsername ? newUsername : p);
+            saveSavedProfiles(profiles);
+        }
+        
+        renderAdminUserList();
+        renderSavedProfiles();
+    }
+
+    function adminDeleteUser(usernameToDelete) {
+        if (!confirm(`Möchtest du das Konto '${usernameToDelete}' wirklich komplett aus der Datenbank löschen?`)) return;
+        
+        let accounts = getAccounts();
+        delete accounts[usernameToDelete];
+        saveAccounts(accounts);
+        
+        removeProfileFromView(usernameToDelete);
+        
+        renderAdminUserList();
+    }
+
+    function adminCreateUser() {
+        if (currentUser !== ADMIN_USER) { alert("Keine Berechtigung!"); return; }
+        const newU = document.getElementById('adminNewUsername').value.trim();
+        const newP = document.getElementById('adminNewPassword').value.trim();
+        const msgDiv = document.getElementById('adminPanelMessage');
+
+        if (!newU || !newP) { msgDiv.className = "auth-error"; msgDiv.textContent = "Ausfüllen!"; return; }
+
+        let accounts = getAccounts();
+        if (accounts[newU]) { msgDiv.className = "auth-error"; msgDiv.textContent = "Existiert bereits!"; return; }
+
+        accounts[newU] = {
+            password: newP,
+            liveUrl: "https://docs.google.com/presentation/d/e/2PACX-1vQYSDiNWgoUySOYEu1qDTetowoaZc7hbNeWHeG8gMveqpJRoWj_qr9QNpmiwHGo1AR9n80qi9nXCbm8/pub?start=true&loop=true&delayms=10000",
+            editUrl: DEFAULT_EDIT_URL,
+            defaults: { font: "Poppins", size: "50", textColor: "#ffffff", outlineColor: "#000000", effect: "fly" },
+            slides: [{ text: `Willkommen\n${newU}`, font: "Poppins", size: "50", textColor: "#ffffff", outlineColor: "#000000", effect: "fly", direction: "bottom", duration: "0.8", pause: "5", posX: "50", posY: "75", mediaData: null, mediaType: null }]
+        };
+        saveAccounts(accounts);
+        
+        msgDiv.className = "admin-success"; msgDiv.textContent = `✓ '${newU}' erstellt!`;
+        document.getElementById('adminNewUsername').value = ""; document.getElementById('adminNewPassword').value = "";
+        renderAdminUserList();
     }
 
     function saveCurrentSlidesToAccount() {
@@ -455,28 +800,196 @@
         }
     }
 
-    function adminCreateUser() {
-        if (currentUser !== ADMIN_USER) { alert("Keine Berechtigung!"); return; }
-        const newU = document.getElementById('adminNewUsername').value.trim();
-        const newP = document.getElementById('adminNewPassword').value.trim();
-        const msgDiv = document.getElementById('adminPanelMessage');
-
-        if (!newU || !newP) { msgDiv.className = "auth-error"; msgDiv.textContent = "Name & PW ausfüllen!"; return; }
-
+    function saveProfileLinks() {
+        if(!currentUser) return;
         let accounts = getAccounts();
-        if (accounts[newU]) { msgDiv.className = "auth-error"; msgDiv.textContent = "Konto existiert bereits!"; return; }
-
-        accounts[newU] = {
-            password: newP,
-            slides: [{ text: `Willkommen\n${newU}`, font: "Poppins", size: "50", textColor: "#ffffff", outlineColor: "#000000", effect: "fly", direction: "bottom", duration: "0.8", pause: "5", posX: "50", posY: "75" }]
-        };
-        saveAccounts(accounts);
-        
-        msgDiv.className = "admin-success"; msgDiv.textContent = `✓ '${newU}' erstellt!`;
-        document.getElementById('adminNewUsername').value = ""; document.getElementById('adminNewPassword').value = "";
+        if(accounts[currentUser]) {
+            accounts[currentUser].liveUrl = document.getElementById('profileLiveUrl').value;
+            accounts[currentUser].editUrl = document.getElementById('profileEditUrl').value;
+            saveAccounts(accounts);
+        }
     }
 
-    /* ---- EXPORT & SHARING LOGIC ---- */
+    function saveProfileDefaults() {
+        if(!currentUser) return;
+        let accounts = getAccounts();
+        if(accounts[currentUser]) {
+            accounts[currentUser].defaults = {
+                font: document.getElementById('defFont').value,
+                size: document.getElementById('defSize').value,
+                textColor: document.getElementById('defColor').value,
+                outlineColor: "#000000",
+                effect: document.getElementById('defEffect').value
+            };
+            saveAccounts(accounts);
+        }
+    }
+
+    function toggleProfileDropdown() {
+        document.getElementById('profileDropdown').classList.toggle('active');
+    }
+
+    function handleFileSelect(input) {
+        const file = input.files[0]; if (!file) return;
+        document.getElementById('dropZoneText').textContent = file.name;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const dataUrl = e.target.result;
+            if (file.type.startsWith('video')) {
+                mediaType = 'video'; loadedImage = null;
+                hiddenVideo.src = dataUrl;
+                hiddenVideo.onloadedmetadata = () => { canvas.width = hiddenVideo.videoWidth; canvas.height = hiddenVideo.videoHeight; hiddenVideo.play(); renderVideoLoop(); };
+            } else {
+                mediaType = 'image'; hiddenVideo.pause();
+                const img = new Image();
+                img.onload = () => { loadedImage = img; canvas.width = img.width; canvas.height = img.height; updateView(); };
+                img.src = dataUrl;
+            }
+            if(savedSlides[activeSlideIndex]) {
+                savedSlides[activeSlideIndex].mediaData = dataUrl;
+                savedSlides[activeSlideIndex].mediaType = mediaType;
+                savedSlides[activeSlideIndex].mediaName = file.name;
+            }
+            saveCurrentSlidesToAccount();
+        };
+        reader.readAsDataURL(file);
+    }
+
+    function createNewSlide() {
+        let accounts = getAccounts();
+        let defs = (accounts[currentUser] && accounts[currentUser].defaults) ? accounts[currentUser].defaults : { font: "Poppins", size: "50", textColor: "#ffffff", outlineColor: "#000000", effect: "fly" };
+        
+        const newSlide = { 
+            text: "Neue Folie\nTippe hier", 
+            font: defs.font || "Poppins", 
+            size: defs.size || "50", 
+            textColor: defs.textColor || "#ffffff", 
+            outlineColor: defs.outlineColor || "#000000", 
+            effect: defs.effect || "fly", 
+            direction: "bottom", duration: "0.8", pause: "5", posX: "50", posY: "75",
+            mediaData: null, mediaType: null, mediaName: null
+        };
+        savedSlides.push(newSlide); activeSlideIndex = savedSlides.length - 1;
+        saveCurrentSlidesToAccount(); loadSlideIntoEditor(activeSlideIndex);
+    }
+
+    function loadSlideIntoEditor(index) {
+        if(!savedSlides[index]) return; activeSlideIndex = index;
+        const slide = savedSlides[index];
+        
+        document.getElementById('slideText').value = slide.text;
+        document.getElementById('fontFamily').value = slide.font;
+        document.getElementById('fontSize').value = slide.size;
+        document.getElementById('textColor').value = slide.textColor;
+        document.getElementById('outlineColor').value = slide.outlineColor;
+        document.getElementById('animEffect').value = slide.effect;
+        document.getElementById('animDirection').value = slide.direction;
+        document.getElementById('animDuration').value = slide.duration;
+        document.getElementById('pauseDuration').value = slide.pause;
+        document.getElementById('posX').value = slide.posX;
+        document.getElementById('posY').value = slide.posY;
+
+        if(slide.mediaData && slide.mediaType) {
+            mediaType = slide.mediaType;
+            document.getElementById('dropZoneText').textContent = slide.mediaName || "Datei geladen";
+            if(mediaType === 'video') {
+                loadedImage = null; hiddenVideo.src = slide.mediaData;
+                hiddenVideo.onloadedmetadata = () => { canvas.width = hiddenVideo.videoWidth; canvas.height = hiddenVideo.videoHeight; hiddenVideo.play(); renderVideoLoop(); };
+            } else {
+                hiddenVideo.pause(); const img = new Image();
+                img.onload = () => { loadedImage = img; canvas.width = img.width; canvas.height = img.height; updateView(); };
+                img.src = slide.mediaData;
+            }
+        } else {
+            mediaType = null; loadedImage = null; hiddenVideo.src = "";
+            document.getElementById('dropZoneText').textContent = "Datei auswählen";
+            canvas.width = 800; canvas.height = 450;
+            updateView();
+        }
+
+        handleEffectChange(); renderSidebar(); updateView();
+    }
+
+    function autoSaveAndRefresh() {
+        if(savedSlides[activeSlideIndex]) {
+            savedSlides[activeSlideIndex].text = document.getElementById('slideText').value;
+            savedSlides[activeSlideIndex].font = document.getElementById('fontFamily').value;
+            savedSlides[activeSlideIndex].size = document.getElementById('fontSize').value;
+            savedSlides[activeSlideIndex].textColor = document.getElementById('textColor').value;
+            savedSlides[activeSlideIndex].outlineColor = document.getElementById('outlineColor').value;
+            savedSlides[activeSlideIndex].effect = document.getElementById('animEffect').value;
+            savedSlides[activeSlideIndex].direction = document.getElementById('animDirection').value;
+            savedSlides[activeSlideIndex].duration = document.getElementById('animDuration').value;
+            savedSlides[activeSlideIndex].pause = document.getElementById('pauseDuration').value;
+            savedSlides[activeSlideIndex].posX = document.getElementById('posX').value;
+            savedSlides[activeSlideIndex].posY = document.getElementById('posY').value;
+        }
+        saveCurrentSlidesToAccount(); renderSidebar(); updateView();
+    }
+
+    function drawFrame(targetCtx, targetCanvas, slide, progress) {
+        if (!targetCanvas.width) { targetCanvas.width = 800; targetCanvas.height = 450; }
+        targetCtx.clearRect(0, 0, targetCanvas.width, targetCanvas.height);
+        targetCtx.fillStyle = '#111111'; targetCtx.fillRect(0, 0, targetCanvas.width, targetCanvas.height);
+
+        if (mediaType === 'video') targetCtx.drawImage(hiddenVideo, 0, 0, targetCanvas.width, targetCanvas.height);
+        else if (loadedImage) targetCtx.drawImage(loadedImage, 0, 0, targetCanvas.width, targetCanvas.height);
+
+        if (!slide || !slide.text) return;
+        const size = parseInt(slide.size, 10) || 40;
+        targetCtx.font = `bold ${size}px "${slide.font}", sans-serif`; targetCtx.textAlign = "center"; targetCtx.textBaseline = 'middle';
+        targetCtx.lineWidth = size / 7; targetCtx.lineJoin = "round";
+
+        let targetX = (targetCanvas.width * parseInt(slide.posX)) / 100;
+        let targetY = (targetCanvas.height * parseInt(slide.posY)) / 100;
+
+        const lines = slide.text.split('\n');
+        let longestLineWidth = 0;
+        lines.forEach(line => {
+            let w = targetCtx.measureText(line).width;
+            if(w > longestLineWidth) longestLineWidth = w;
+        });
+
+        let halfW = longestLineWidth / 2;
+        if (targetX - halfW < 10) {
+            targetX = halfW + 10;
+        } else if (targetX + halfW > targetCanvas.width - 10) {
+            targetX = targetCanvas.width - halfW - 10;
+        }
+
+        let curX = targetX, curY = targetY; let alpha = 1.0, scale = 1.0; const ease = 1 - Math.pow(1 - progress, 3);
+
+        if (progress < 1.0 && slide.effect !== 'none') {
+            if (slide.effect === 'fly') {
+                if (slide.direction === 'bottom') curY = targetY + (targetCanvas.height + 150 - targetY) * (1 - ease);
+                if (slide.direction === 'top') curY = targetY - (targetY + 150) * (1 - ease);
+                if (slide.direction === 'left') curX = targetX - (targetX + targetCanvas.width / 2) * (1 - ease);
+                if (slide.direction === 'right') curX = targetX + (targetCanvas.width - targetX + targetCanvas.width / 2) * (1 - ease);
+            } else if (slide.effect === 'fade') alpha = ease;
+            else if (slide.effect === 'zoom') { scale = ease; alpha = ease; }
+            else if (slide.effect === 'bounce') curY = targetY - (Math.abs(Math.sin(progress * Math.PI * 2.5)) * 60 * (1 - progress));
+        }
+
+        targetCtx.save(); targetCtx.globalAlpha = alpha; targetCtx.translate(curX, curY); targetCtx.scale(scale, scale);
+        lines.forEach((line, i) => {
+            let y = (i - (lines.length - 1) / 2) * (size * 1.25);
+            targetCtx.strokeStyle = slide.outlineColor; targetCtx.strokeText(line, 0, y);
+            targetCtx.fillStyle = slide.textColor; targetCtx.fillText(line, 0, y);
+        });
+        targetCtx.restore();
+    }
+
+    function openGoogleSlidesPresentation() {
+        let link = document.getElementById('profileLiveUrl').value.trim();
+        if (link) window.open(link, '_blank');
+    }
+
+    function openGoogleSlidesEditor() {
+        let link = document.getElementById('profileEditUrl').value.trim();
+        if (link) window.open(link, '_blank');
+    }
+
     function getSharedSlides() { return JSON.parse(localStorage.getItem('werbung_pro_shared_slides')) || []; }
     function saveSharedSlides(slides) { localStorage.setItem('werbung_pro_shared_slides', JSON.stringify(slides)); }
 
@@ -485,74 +998,39 @@
         if(!currentSlide) return;
         let sharedPool = getSharedSlides();
         const newSharedItem = { ...currentSlide, id: Date.now() + Math.random().toString(36).substr(2, 5), author: currentUser };
-        sharedPool.unshift(newSharedItem); 
-        saveSharedSlides(sharedPool);
-        alert("🎉 Folie geteilt!"); 
-        renderSharedSlides();
-    }
-
-    // --- LÖSCHFUNKTION FÜR SHARED SLIDES ---
-    function deleteSharedSlide(index) {
-        let sharedPool = getSharedSlides();
-        sharedPool.splice(index, 1);
-        saveSharedSlides(sharedPool);
-        renderSharedSlides();
+        sharedPool.unshift(newSharedItem); saveSharedSlides(sharedPool);
+        alert("🎉 Folie samt Design geteilt!"); renderSharedSlides();
     }
 
     function renderSharedSlides() {
-        const container = document.getElementById('sharedListContainer');
-        container.innerHTML = "";
+        const container = document.getElementById('sharedListContainer'); container.innerHTML = "";
         const pool = getSharedSlides();
-
-        if (pool.length === 0) {
+        if(pool.length === 0) {
             container.innerHTML = `<span style="font-style:italic; font-size:13px; color:var(--text-sub); text-align:center; display:block; margin-top:15px;">Keine geteilten Folien.</span>`;
             return;
         }
-
         pool.forEach((item, index) => {
-            const div = document.createElement('div');
-            div.className = "shared-item";
+            const div = document.createElement('div'); div.className = "shared-item";
             const displayTitle = item.text.split('\n')[0] || "Folie";
-
-            div.innerHTML = `
-                <div class="shared-item-info">
-                    <div class="shared-item-title">${displayTitle}</div>
-                    <div class="shared-item-author">von ${item.author}</div>
-                </div>
-                <div style="display:flex; gap:8px;">
-                    <button class="btn-add-shared" onclick="addSharedSlideToMyList(sharedSlidesPool[${index}])">
-                        <i class="fa-solid fa-plus"></i>
-                    </button>
-                    <button class="btn-delete-shared" onclick="deleteSharedSlide(${index})">
-                        <i class="fa-solid fa-trash"></i>
-                    </button>
-                </div>
-            `;
-            // Hinweis: Da wir die Daten hier direkt aus dem Storage laden, hier eine Hilfs-Variable
+            div.innerHTML = `<div class="shared-item-info"><div class="shared-item-title">${displayTitle}</div><div class="shared-item-author">von ${item.author}</div></div><div style="display:flex; gap:8px;"><button class="btn-add-shared"><i class="fa-solid fa-plus"></i></button><button class="slide-action-btn delete-shared-btn"><i class="fa-solid fa-trash"></i></button></div>`;
+            div.querySelector('.btn-add-shared').addEventListener('click', () => { addSharedSlideToMyList(item); });
+            div.querySelector('.delete-shared-btn').addEventListener('click', () => { deleteSharedSlide(index); });
             container.appendChild(div);
-        });
-        
-        // Kleine Korrektur, um die Daten direkt beim Klicken zu übergeben:
-        const addButtonElements = document.querySelectorAll('.btn-add-shared');
-        addButtonElements.forEach((btn, idx) => {
-            btn.onclick = () => addSharedSlideToMyList(pool[idx]);
         });
     }
 
     function addSharedSlideToMyList(sharedSlide) {
-        const copiedSlide = { text: sharedSlide.text, font: sharedSlide.font, size: sharedSlide.size, textColor: sharedSlide.textColor, outlineColor: sharedSlide.outlineColor, effect: sharedSlide.effect, direction: sharedSlide.direction, duration: sharedSlide.duration, pause: sharedSlide.pause, posX: sharedSlide.posX, posY: sharedSlide.posY };
-        savedSlides.push(copiedSlide); 
-        activeSlideIndex = savedSlides.length - 1;
-        saveCurrentSlidesToAccount(); 
-        loadSlideIntoEditor(activeSlideIndex);
-        alert(`📥 Folie kopiert!`);
+        const copiedSlide = { ...sharedSlide };
+        delete copiedSlide.id; delete copiedSlide.author;
+        savedSlides.push(copiedSlide); activeSlideIndex = savedSlides.length - 1;
+        saveCurrentSlidesToAccount(); loadSlideIntoEditor(activeSlideIndex);
+        alert(`📥 Folie inklusive Medien kopiert!`);
     }
 
-    /* ---- CORE CONFIGURATOR OPERATIONS ---- */
-    function createNewSlide() {
-        const newSlide = { text: "Neue Folie\nTippe hier", font: "Poppins", size: "50", textColor: "#ffffff", outlineColor: "#000000", effect: "fly", direction: "bottom", duration: "0.8", pause: "5", posX: "50", posY: "75" };
-        savedSlides.push(newSlide); activeSlideIndex = savedSlides.length - 1;
-        saveCurrentSlidesToAccount(); loadSlideIntoEditor(activeSlideIndex);
+    function deleteSharedSlide(index) {
+        let sharedPool = getSharedSlides();
+        sharedPool.splice(index, 1); saveSharedSlides(sharedPool);
+        renderSharedSlides();
     }
 
     function renderSidebar() {
@@ -574,53 +1052,39 @@
         saveCurrentSlidesToAccount(); loadSlideIntoEditor(activeSlideIndex);
     }
 
-    function loadSlideIntoEditor(index) {
-        if(!savedSlides[index]) return; activeSlideIndex = index;
-        const slide = savedSlides[index];
-        document.getElementById('slideText').value = slide.text;
-        document.getElementById('fontFamily').value = slide.font;
-        document.getElementById('fontSize').value = slide.size;
-        document.getElementById('textColor').value = slide.textColor;
-        document.getElementById('outlineColor').value = slide.outlineColor;
-        document.getElementById('animEffect').value = slide.effect;
-        document.getElementById('animDirection').value = slide.direction;
-        document.getElementById('animDuration').value = slide.duration;
-        document.getElementById('pauseDuration').value = slide.pause;
-        document.getElementById('posX').value = slide.posX;
-        document.getElementById('posY').value = slide.posY;
-        handleEffectChange(); renderSidebar(); updateView();
+    function openAccordion(id) {
+        const element = document.getElementById(id); const isActive = element.classList.contains('active');
+        document.querySelectorAll('.acc-group').forEach(group => group.classList.remove('active'));
+        if (!isActive) element.classList.add('active');
     }
+    function toggleTheme() { document.body.classList.toggle('dark-theme'); document.getElementById('themeToggleBtn').textContent = document.body.classList.contains('dark-theme') ? "☀️" : "🌙"; }
+    function togglePalette() { document.getElementById('paintPalette').classList.toggle('active'); }
+    function setGradient(g, s) { document.documentElement.style.setProperty('--gradient-string', g); document.documentElement.style.setProperty('--bg-size-value', s); togglePalette(); }
+    function toggleExtraSettings() { document.getElementById('extraSettings').classList.toggle('visible'); }
+    function handleEffectChange() { document.getElementById('directionWrapper').style.display = (document.getElementById('animEffect').value === 'fly') ? 'block' : 'none'; autoSaveAndRefresh(); }
+    function renderVideoLoop() { if (mediaType === 'video' && currentUser && !isPlayingAnimation) { drawFrame(ctx, canvas, savedSlides[activeSlideIndex], 1.0); requestAnimationFrame(renderVideoLoop); } }
+    function updateView() { if (mediaType !== 'video') drawFrame(ctx, canvas, savedSlides[activeSlideIndex], 1.0); }
 
-    function autoSaveAndRefresh() {
-        if(savedSlides[activeSlideIndex]) {
-            savedSlides[activeSlideIndex].text = document.getElementById('slideText').value;
-            savedSlides[activeSlideIndex].font = document.getElementById('fontFamily').value;
-            savedSlides[activeSlideIndex].size = document.getElementById('fontSize').value;
-            savedSlides[activeSlideIndex].textColor = document.getElementById('textColor').value;
-            savedSlides[activeSlideIndex].outlineColor = document.getElementById('outlineColor').value;
-            savedSlides[activeSlideIndex].effect = document.getElementById('animEffect').value;
-            savedSlides[activeSlideIndex].direction = document.getElementById('animDirection').value;
-            savedSlides[activeSlideIndex].duration = document.getElementById('animDuration').value;
-            savedSlides[activeSlideIndex].pause = document.getElementById('pauseDuration').value;
-            savedSlides[activeSlideIndex].posX = document.getElementById('posX').value;
-            savedSlides[activeSlideIndex].posY = document.getElementById('posY').value;
+    function triggerPreviewAnimation() {
+        isPlayingAnimation = true; let start = performance.now(); let dur = parseFloat(document.getElementById('animDuration').value) * 1000;
+        function loop(now) {
+            let p = Math.min((now - start) / dur, 1.0); drawFrame(ctx, canvas, savedSlides[activeSlideIndex], p);
+            if (p < 1.0) requestAnimationFrame(loop); else { isPlayingAnimation = false; setTimeout(() => updateView(), 400); }
         }
-        saveCurrentSlidesToAccount(); renderSidebar(); updateView();
+        requestAnimationFrame(loop);
     }
 
     function processExport() {
         const format = document.getElementById('exportFormatSelect').value;
         const msg = document.getElementById('statusMessage');
-        msg.style.display = 'block';
-        document.getElementById('downloadBox').style.display = 'none';
+        msg.style.display = 'block'; document.getElementById('downloadBox').style.display = 'none';
 
         if (format === 'image') {
             msg.textContent = "⏳ Erzeuge Bild... ⏳"; msg.className = "status progress";
             drawFrame(ctx, canvas, savedSlides[activeSlideIndex], 1.0);
             canvas.toBlob((blob) => {
-                exportBlob = blob;
-                exportFileName = `werbung_folie_${activeSlideIndex+1}.png`;
-                msg.textContent = "✓ Bild erfolgreich generiert! ✓"; msg.className = "status success";
+                exportBlob = blob; exportFileName = `werbung_folie_${activeSlideIndex+1}.png`;
+                msg.textContent = "✓ Bild erfolgreich generiert!"; msg.className = "status success";
                 document.getElementById('downloadBox').style.display = 'block';
             }, 'image/png');
         } else if (format === 'gif') {
@@ -638,7 +1102,7 @@
                     fetch(obj.image).then(res => res.blob()).then(blob => {
                         exportBlob = blob; exportFileName = `werbung_folie_${activeSlideIndex+1}.gif`;
                         document.getElementById('downloadBox').style.display = 'block';
-                        msg.textContent = "✓ GIF erfolgreich gerendert! ✓"; msg.className = "status success";
+                        msg.textContent = "✓ GIF erfolgreich gerendert!"; msg.className = "status success";
                         updateView();
                     });
                 }
@@ -648,25 +1112,19 @@
             let animDur = parseFloat(document.getElementById('animDuration').value) || 1;
             let pauseDur = parseFloat(document.getElementById('pauseDuration').value) || 5;
             let totalTime = (animDur + pauseDur) * 1000;
-            let stream = canvas.captureStream(25); 
-            let recorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
-            let chunks = [];
-            recorder.ondataavailable = e => chunks.push(e.data);
+            let stream = canvas.captureStream(25); let recorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
+            let chunks = []; recorder.ondataavailable = e => chunks.push(e.data);
             recorder.onstop = () => {
-                exportBlob = new Blob(chunks, { type: 'video/webm' });
-                exportFileName = `werbung_folie_${activeSlideIndex+1}.webm`;
-                msg.textContent = "✓ Video erfolgreich! ✓"; msg.className = "status success";
+                exportBlob = new Blob(chunks, { type: 'video/webm' }); exportFileName = `werbung_folie_${activeSlideIndex+1}.webm`;
+                msg.textContent = "✓ Video erfolgreich aufgezeichnet!"; msg.className = "status success";
                 document.getElementById('downloadBox').style.display = 'block';
                 updateView();
             };
-            recorder.start();
-            let start = performance.now();
+            recorder.start(); let start = performance.now();
             function recordLoop(now) {
-                let elapsed = now - start;
-                let progress = Math.min(elapsed / (animDur * 1000), 1.0);
+                let elapsed = now - start; let progress = elapsed / (animDur * 1000); if (progress > 1.0) progress = 1.0;
                 drawFrame(ctx, canvas, savedSlides[activeSlideIndex], progress);
-                if (elapsed < totalTime) requestAnimationFrame(recordLoop);
-                else recorder.stop();
+                if (elapsed < totalTime) requestAnimationFrame(recordLoop); else recorder.stop();
             }
             requestAnimationFrame(recordLoop);
         }
@@ -677,84 +1135,7 @@
         const a = document.createElement('a'); a.href = URL.createObjectURL(exportBlob);
         a.download = exportFileName; a.click();
     }
-
-    function openAccordion(id) {
-        const element = document.getElementById(id); const isActive = element.classList.contains('active');
-        document.querySelectorAll('.acc-group').forEach(group => group.classList.remove('active'));
-        if (!isActive) element.classList.add('active');
-    }
-
-    function toggleTheme() { document.body.classList.toggle('dark-theme'); document.getElementById('themeToggleBtn').textContent = document.body.classList.contains('dark-theme') ? "☀️" : "🌙"; }
-    function togglePalette() { document.getElementById('paintPalette').classList.toggle('active'); }
-    function setGradient(g, s) { document.documentElement.style.setProperty('--gradient-string', g); document.documentElement.style.setProperty('--bg-size-value', s); togglePalette(); }
-    function toggleExtraSettings() { document.getElementById('extraSettings').classList.toggle('visible'); }
-    function handleEffectChange() { document.getElementById('directionWrapper').style.display = (document.getElementById('animEffect').value === 'fly') ? 'block' : 'none'; autoSaveAndRefresh(); }
-
-    function handleFileSelect(input) {
-        const file = input.files[0]; if (!file) return;
-        document.getElementById('dropZoneText').textContent = file.name;
-        if (file.type.startsWith('video')) {
-            mediaType = 'video'; loadedImage = null; hiddenVideo.src = URL.createObjectURL(file);
-            hiddenVideo.onloadedmetadata = () => { canvas.width = hiddenVideo.videoWidth; canvas.height = hiddenVideo.videoHeight; hiddenVideo.play(); renderVideoLoop(); };
-        } else {
-            mediaType = 'image'; hiddenVideo.pause(); const img = new Image();
-            img.onload = () => { loadedImage = img; canvas.width = img.width; canvas.height = img.height; updateView(); };
-            img.src = URL.createObjectURL(file);
-        }
-    }
-
-    function renderVideoLoop() { if (mediaType === 'video' && currentUser && !isPlayingAnimation) { drawFrame(ctx, canvas, savedSlides[activeSlideIndex], 1.0); requestAnimationFrame(renderVideoLoop); } }
-    function updateView() { if (mediaType !== 'video') drawFrame(ctx, canvas, savedSlides[activeSlideIndex], 1.0); }
-
-    function triggerPreviewAnimation() {
-        isPlayingAnimation = true; let start = performance.now(); let dur = parseFloat(document.getElementById('animDuration').value) * 1000;
-        function loop(now) {
-            let p = Math.min((now - start) / dur, 1.0); drawFrame(ctx, canvas, savedSlides[activeSlideIndex], p);
-            if (p < 1.0) requestAnimationFrame(loop); else { isPlayingAnimation = false; setTimeout(() => updateView(), 400); }
-        }
-        requestAnimationFrame(loop);
-    }
-
-    function drawFrame(targetCtx, targetCanvas, slide, progress) {
-        if (!targetCanvas.width) { targetCanvas.width = 800; targetCanvas.height = 450; }
-        targetCtx.clearRect(0, 0, targetCanvas.width, targetCanvas.height);
-        targetCtx.fillStyle = '#111111'; targetCtx.fillRect(0, 0, targetCanvas.width, targetCanvas.height);
-
-        if (mediaType === 'video') targetCtx.drawImage(hiddenVideo, 0, 0, targetCanvas.width, targetCanvas.height);
-        else if (loadedImage) targetCtx.drawImage(loadedImage, 0, 0, targetCanvas.width, targetCanvas.height);
-
-        if (!slide || !slide.text) return;
-        const size = parseInt(slide.size, 10) || 40;
-        targetCtx.font = `bold ${size}px "${slide.font}", sans-serif`; targetCtx.textAlign = "center"; targetCtx.textBaseline = 'middle';
-        targetCtx.lineWidth = size / 7; targetCtx.lineJoin = "round";
-
-        const targetX = (targetCanvas.width * parseInt(slide.posX)) / 100;
-        const targetY = (targetCanvas.height * parseInt(slide.posY)) / 100;
-        let curX = targetX, curY = targetY; let alpha = 1.0, scale = 1.0; const ease = 1 - Math.pow(1 - progress, 3);
-
-        if (progress < 1.0 && slide.effect !== 'none') {
-            if (slide.effect === 'fly') {
-                if (slide.direction === 'bottom') curY = targetY + (targetCanvas.height + 150 - targetY) * (1 - ease);
-                if (slide.direction === 'top') curY = targetY - (targetY + 150) * (1 - ease);
-                if (slide.direction === 'left') curX = targetX - (targetX + targetCanvas.width / 2) * (1 - ease);
-                if (slide.direction === 'right') curX = targetX + (targetCanvas.width - targetX + targetCanvas.width / 2) * (1 - ease);
-            } else if (slide.effect === 'fade') alpha = ease;
-            else if (slide.effect === 'zoom') { scale = ease; alpha = ease; }
-            else if (slide.effect === 'bounce') curY = targetY - (Math.abs(Math.sin(progress * Math.PI * 2.5)) * 60 * (1 - progress));
-        }
-
-        targetCtx.save(); targetCtx.globalAlpha = alpha; targetCtx.translate(curX, curY); targetCtx.scale(scale, scale);
-        const lines = slide.text.split('\n');
-        lines.forEach((line, i) => {
-            let y = (i - (lines.length - 1) / 2) * (size * 1.25);
-            targetCtx.strokeStyle = slide.outlineColor; targetCtx.strokeText(line, 0, y);
-            targetCtx.fillStyle = slide.textColor; targetCtx.fillText(line, 0, y);
-        });
-        targetCtx.restore();
-    }
-
-    function openGoogleSlidesPresentation() { const link = document.getElementById('googleSlidesUrlInput').value.trim(); if (link) window.open(link, '_blank'); }
-    function triggerNativeCast() { alert("Nutze Chrome, gehe ins drei Punkte Menü und zu Streamen, Speichern und Teilen und klicke Streamen, jetzt wähle die Chromebox in der TipsArena aus. Wenn du die Funktion öfter verwendest mache einen Rechtsklick auf 🛜📺 und drücke Anpinnen."); }
+    function triggerNativeCast() { alert("Nutze Chrome, gehe ins Menü (drei Punkte) -> Streamen, Speichern und Teilen -> Streamen, jetzt wähle die Chromebox aus."); }
 </script>
 </body>
 </html>
