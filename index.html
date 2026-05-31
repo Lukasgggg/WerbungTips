@@ -10,7 +10,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Montserrat:wght@800&family=Pacifico&family=Poppins:wght@800&family=Press+Start+2P&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
-    <!-- Firebase Compat SDKs für die Echtzeit-Synchronisation -->
     <script src="https://www.gstatic.com/firebasejs/10.4.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.4.0/firebase-database-compat.js"></script>
     
@@ -268,7 +267,6 @@
                 </div>
             </div>
             
-            <!-- Geteilte Mediathek jetzt fest im Profil / den Einstellungen -->
             <div class="profile-section shared-area">
                 <h3><i class="fa-solid fa-globe"></i> Geteilte Cloud-Mediathek</h3>
                 <div class="subtitle" style="margin-bottom:5px; font-size:11px;">Folien von anderen ansehen & kopieren</div>
@@ -516,9 +514,6 @@
 <video id="hiddenVideo" loop muted playsinline></video>
 
 <script>
-    // ==========================================
-    // DEINE ECHTEN FIREBASE-ZUGANGSDATEN AKTIVIERT!
-    // ==========================================
     const firebaseConfig = {
         apiKey: "AIzaSyCxePirHddxSKyiDLRCDgh45MMrxVjiYfo",
         authDomain: "tipsarena-9a804.firebaseapp.com",
@@ -573,7 +568,6 @@
     function initFirebaseSync() {
         if (!db) return;
         
-        // Listener für Konten und Folien
         db.ref('accounts').on('value', (snapshot) => {
             const remoteAccounts = snapshot.val();
             if (remoteAccounts) {
@@ -595,7 +589,6 @@
             }
         });
 
-        // ECHTZEIT-SYNCHRONISATION FÜR DIE GETEILTE MEDIATHEK!
         db.ref('shared_slides').on('value', (snapshot) => {
             const remoteShared = snapshot.val();
             renderSharedSlides(remoteShared);
@@ -729,7 +722,6 @@
 
         loadSlideIntoEditor(activeSlideIndex);
         
-        // Initialisiert Mediathek-Ansicht beim Laden
         if(db) {
             db.ref('shared_slides').once('value').then(snap => renderSharedSlides(snap.val()));
         }
@@ -866,6 +858,9 @@
         document.getElementById('profileDropdown').classList.toggle('active');
     }
 
+    // ================================================================
+    // VERBESSERTE DATEIAUSWAHL MIT AUTOMATISCHER BILD-KOMPRIMIERUNG
+    // ================================================================
     function handleFileSelect(input) {
         const file = input.files[0]; if (!file) return;
         document.getElementById('dropZoneText').textContent = file.name;
@@ -877,18 +872,49 @@
                 mediaType = 'video'; loadedImage = null;
                 hiddenVideo.src = dataUrl;
                 hiddenVideo.onloadedmetadata = () => { canvas.width = hiddenVideo.videoWidth; canvas.height = hiddenVideo.videoHeight; hiddenVideo.play(); renderVideoLoop(); };
+                
+                if(savedSlides[activeSlideIndex]) {
+                    savedSlides[activeSlideIndex].mediaData = dataUrl;
+                    savedSlides[activeSlideIndex].mediaType = mediaType;
+                    savedSlides[activeSlideIndex].mediaName = file.name;
+                }
+                saveCurrentSlidesToAccount();
             } else {
                 mediaType = 'image'; hiddenVideo.pause();
                 const img = new Image();
-                img.onload = () => { loadedImage = img; canvas.width = img.width; canvas.height = img.height; updateView(); };
+                img.onload = () => {
+                    // Bild auf ein Maximum runterrechnen (z.B. max 1200px Seitenlänge)
+                    const maxDim = 1200; 
+                    let w = img.width;
+                    let h = img.height;
+                    if (w > maxDim || h > maxDim) {
+                        if (w > h) { h = Math.round((h * maxDim) / w); w = maxDim; }
+                        else { w = Math.round((w * maxDim) / h); h = maxDim; }
+                    }
+                    
+                    // Unsichtbaren Hilfs-Canvas zum Komprimieren erzeugen
+                    const tempCanvas = document.createElement('canvas');
+                    tempCanvas.width = w; tempCanvas.height = h;
+                    const tempCtx = tempCanvas.getContext('2d');
+                    tempCtx.drawImage(img, 0, 0, w, h);
+                    
+                    // Als kompaktes JPEG mit 70% Qualität exportieren (macht die Datei winzig für Firebase!)
+                    const compressedDataUrl = tempCanvas.toDataURL('image/jpeg', 0.7);
+
+                    loadedImage = img; 
+                    canvas.width = img.width; 
+                    canvas.height = img.height; 
+                    
+                    if(savedSlides[activeSlideIndex]) {
+                        savedSlides[activeSlideIndex].mediaData = compressedDataUrl;
+                        savedSlides[activeSlideIndex].mediaType = mediaType;
+                        savedSlides[activeSlideIndex].mediaName = file.name;
+                    }
+                    saveCurrentSlidesToAccount();
+                    updateView();
+                };
                 img.src = dataUrl;
             }
-            if(savedSlides[activeSlideIndex]) {
-                savedSlides[activeSlideIndex].mediaData = dataUrl;
-                savedSlides[activeSlideIndex].mediaType = mediaType;
-                savedSlides[activeSlideIndex].mediaName = file.name;
-            }
-            saveCurrentSlidesToAccount();
         };
         reader.readAsDataURL(file);
     }
@@ -1024,9 +1050,6 @@
         if (link) window.open(link, '_blank');
     }
 
-    // ==========================================
-    // CLOUD-MEDIATHEK LOGIK ÜBER FIREBASE
-    // ==========================================
     function shareCurrentSlide() {
         const currentSlide = savedSlides[activeSlideIndex];
         if(!currentSlide) return;
@@ -1038,10 +1061,10 @@
                 timestamp: Date.now()
             };
             db.ref('shared_slides').push(newSharedItem)
-                .then(() => alert("🎉 Folie samt Design in der Cloud-Mediathek geteilt!"))
+                .then(() => alert("🎉 Folie samt komprimiertem Bild erfolgreich in der Cloud geteilt!"))
                 .catch(err => alert("Fehler beim Teilen: " + err.message));
         } else {
-            alert("Firebase nicht verbunden! Lokaler Fallback aktiv.");
+            alert("Firebase nicht verbunden!");
         }
     }
 
@@ -1054,7 +1077,6 @@
             return;
         }
         
-        // Durchläuft das Firebase-Objekt (Keys sind IDs von push())
         Object.keys(sharedDataObj).forEach(key => {
             const item = sharedDataObj[key];
             const div = document.createElement('div'); 
@@ -1080,13 +1102,13 @@
 
     function addSharedSlideToMyList(sharedSlide) {
         const copiedSlide = { ...sharedSlide };
-        delete copiedSlide.author; delete copiedSlide.timestamp; // Metadaten säubern
+        delete copiedSlide.author; delete copiedSlide.timestamp;
         
         savedSlides.push(copiedSlide); 
         activeSlideIndex = savedSlides.length - 1;
         saveCurrentSlidesToAccount(); 
         loadSlideIntoEditor(activeSlideIndex);
-        alert(`📥 Folie erfolgreich in deine Liste kopiert!`);
+        alert(`📥 Folie inklusive Design wurde auf dein Gerät kopiert!`);
     }
 
     function deleteSharedSlide(firebaseKey) {
