@@ -320,8 +320,9 @@
 
     <div class="top-menu-container">
         <div class="button-row">
-            <button class="menu-btn" onclick="togglePalette()">🎨</button>
-            <button class="menu-btn" id="themeToggleBtn" onclick="toggleTheme()">🌙</button>
+            <button class="menu-btn" onclick="window.location.reload()" title="Seite aktualisieren / neu laden">🔄</button>
+            <button class="menu-btn" onclick="togglePalette()" title="Farben">🎨</button>
+            <button class="menu-btn" id="themeToggleBtn" onclick="toggleTheme()" title="Design">🌙</button>
         </div>
         <div class="paint-palette" id="paintPalette">
             <div class="color-swatch" style="background: linear-gradient(45deg, #ff0055, #f97316, #eab308, #22c55e, #3b82f6, #9333ea, #ff0055);" onclick="setGradient('linear-gradient(45deg, #ff0055, #f97316, #eab308, #22c55e, #3b82f6, #9333ea, #ff0055)', '600% 600%')"></div>
@@ -508,6 +509,26 @@
 </div>
 
 <video id="hiddenVideo" loop muted playsinline></video>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCxePirHddxSKyiDLRCDgh45MMrxVjiYfo",
+      authDomain: "tipsarena-9a804.firebaseapp.com",
+      databaseURL: "https://tipsarena-9a804-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "tipsarena-9a804",
+      storageBucket: "tipsarena-9a804.firebasestorage.app",
+      messagingSenderId: "218694866327",
+      appId: "1:218694866327:web:d6b8410610b599bd7160d2",
+      measurementId: "G-FBJKFT44GH"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    window.firebaseApp = app; 
+</script>
 
 <script>
     let currentUser = null; 
@@ -753,7 +774,6 @@
 
     function toggleProfileDropdown() { document.getElementById('profileDropdown').classList.toggle('active'); }
 
-    // NEU: Separates Toggle für das Profilmenü, damit es nicht die Haupt-Akkordeons beeinflusst
     function openProfileAccordion(id) {
         const element = document.getElementById(id);
         const isActive = element.classList.contains('active');
@@ -761,7 +781,6 @@
         if (!isActive) element.classList.add('active');
     }
 
-    // Haupt-Akkordeon (für den Editor)
     function openAccordion(id) {
         const element = document.getElementById(id); const isActive = element.classList.contains('active');
         document.querySelectorAll('.panel .acc-group').forEach(group => group.classList.remove('active'));
