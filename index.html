@@ -11,6 +11,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gifshot/0.3.2/gifshot.min.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics-compat.js"></script>
     
     <style>
         :root {
@@ -121,7 +125,6 @@
         .profile-dropdown { background: var(--card-bg); border: 1px solid var(--card-border); padding: 20px; border-radius: 24px; box-shadow: 0 15px 45px rgba(0,0,0,0.2); opacity: 0; transform: translateY(-10px); pointer-events: none; transition: all 0.3s ease; width: 340px; backdrop-filter: blur(20px); max-height: 85vh; overflow-y: auto; }
         .profile-dropdown.active { opacity: 1; transform: translateY(0); pointer-events: auto; }
 
-        /* NEU: Profil-Menü Accordion Styles */
         .profile-acc-group { border-bottom: 1px solid var(--card-border); padding: 12px 0; overflow: hidden; }
         .profile-acc-group:last-child { border-bottom: none; }
         .profile-acc-group.no-border-top { border-top: none; padding-top: 0; }
@@ -320,9 +323,8 @@
 
     <div class="top-menu-container">
         <div class="button-row">
-            <button class="menu-btn" onclick="window.location.reload()" title="Seite aktualisieren / neu laden">🔄</button>
-            <button class="menu-btn" onclick="togglePalette()" title="Farben">🎨</button>
-            <button class="menu-btn" id="themeToggleBtn" onclick="toggleTheme()" title="Design">🌙</button>
+            <button class="menu-btn" onclick="togglePalette()">🎨</button>
+            <button class="menu-btn" id="themeToggleBtn" onclick="toggleTheme()">🌙</button>
         </div>
         <div class="paint-palette" id="paintPalette">
             <div class="color-swatch" style="background: linear-gradient(45deg, #ff0055, #f97316, #eab308, #22c55e, #3b82f6, #9333ea, #ff0055);" onclick="setGradient('linear-gradient(45deg, #ff0055, #f97316, #eab308, #22c55e, #3b82f6, #9333ea, #ff0055)', '600% 600%')"></div>
@@ -330,11 +332,6 @@
             <div class="color-swatch" style="background: linear-gradient(45deg, #f59e0b, #ef4444, #d946ef, #f59e0b);" onclick="setGradient('linear-gradient(45deg, #f59e0b, #ef4444, #d946ef, #f59e0b)', '400% 400%')"></div>
             <div class="color-swatch" style="background: linear-gradient(45deg, #06b6d4, #3b82f6, #0ea5e9, #06b6d4);" onclick="setGradient('linear-gradient(45deg, #06b6d4, #3b82f6, #0ea5e9, #06b6d4)', '300% 300%')"></div>
             <div class="color-swatch" style="background: linear-gradient(45deg, #10b981, #84cc16, #22c55e, #10b981);" onclick="setGradient('linear-gradient(45deg, #10b981, #84cc16, #22c55e, #10b981)', '300% 300%')"></div>
-            <div class="color-swatch" style="background: linear-gradient(45deg, #6366f1, #a855f7, #4f46e5, #6366f1);" onclick="setGradient('linear-gradient(45deg, #6366f1, #a855f7, #4f46e5, #6366f1)', '400% 400%')"></div>
-            <div class="color-swatch" style="background: linear-gradient(45deg, #0284c7, #10b981, #6366f1, #0284c7);" onclick="setGradient('linear-gradient(45deg, #0284c7, #10b981, #6366f1, #0284c7)', '500% 500%')"></div>
-            <div class="color-swatch" style="background: linear-gradient(45deg, #7f1d1d, #ef4444, #f97316, #7f1d1d);" onclick="setGradient('linear-gradient(45deg, #7f1d1d, #ef4444, #f97316, #7f1d1d)', '300% 300%')"></div>
-            <div class="color-swatch" style="background: linear-gradient(45deg, #1e1b4b, #eab308, #312e81, #1e1b4b);" onclick="setGradient('linear-gradient(45deg, #1e1b4b, #eab308, #312e81, #1e1b4b)', '400% 400%')"></div>
-            <div class="color-swatch" style="background: linear-gradient(45deg, #f472b6, #38bdf8, #f472b6, #38bdf8);" onclick="setGradient('linear-gradient(45deg, #f472b6, #38bdf8, #f472b6, #38bdf8)', '300% 300%')"></div>
         </div>
     </div>
 
@@ -510,10 +507,10 @@
 
 <video id="hiddenVideo" loop muted playsinline></video>
 
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
-
+<script>
+    // -------------------------------------------------------------
+    // 1. FIREBASE INITIALISIERUNG
+    // -------------------------------------------------------------
     const firebaseConfig = {
       apiKey: "AIzaSyCxePirHddxSKyiDLRCDgh45MMrxVjiYfo",
       authDomain: "tipsarena-9a804.firebaseapp.com",
@@ -525,12 +522,13 @@
       measurementId: "G-FBJKFT44GH"
     };
 
-    const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
-    window.firebaseApp = app; 
-</script>
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+    firebase.analytics();
 
-<script>
+    // -------------------------------------------------------------
+    // 2. GLOBALE VARIABLEN
+    // -------------------------------------------------------------
     let currentUser = null; 
     let savedSlides = [];
     let activeSlideIndex = 0;
@@ -541,6 +539,7 @@
     let exportFileName = "";
     let isPlayingAnimation = false;
     let isDraggingText = false;
+    let isSyncing = false; // Verhindert Endlosschleife beim Speichern
 
     const canvas = document.getElementById('canvasPreview');
     const ctx = canvas.getContext('2d');
@@ -549,229 +548,70 @@
     const ADMIN_USER = "TipsAdmin";
     const ADMIN_PASS = "tipsarena26";
     const DEFAULT_EDIT_URL = "https://docs.google.com/presentation/d/17bytELuo4LFXibuZPoVJTkyydX_he-uGQsvCBL8hDjs/edit?slide=id.g3ed1b06c927_0_0#slide=id.g3ed1b06c927_0_0";
+    const DEFAULT_LIVE_URL = "https://docs.google.com/presentation/d/e/2PACX-1vQYSDiNWgoUySOYEu1qDTetowoaZc7hbNeWHeG8gMveqpJRoWj_qr9QNpmiwHGo1AR9n80qi9nXCbm8/pub?start=false&loop=false&delayms=3000";
 
+    // -------------------------------------------------------------
+    // 3. START & FIREBASE SYNC LISTENER
+    // -------------------------------------------------------------
     window.onload = () => {
+        initFirebaseSync();
         initAdminAccount();
         renderSavedProfiles();
         checkUserSession();
         initDragEvents();
     };
 
+    function initFirebaseSync() {
+        // Konten synchronisieren
+        db.ref('accounts').on('value', (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                isSyncing = true;
+                localStorage.setItem('werbung_pro_accounts', JSON.stringify(data));
+                
+                if (currentUser && data[currentUser]) {
+                    savedSlides = data[currentUser].slides || [];
+                    renderSidebar();
+                    // Lade die Folie neu, um Sync-Änderungen anderer Geräte zu sehen
+                    if (activeSlideIndex >= savedSlides.length) activeSlideIndex = Math.max(0, savedSlides.length - 1);
+                    loadSlideIntoEditor(activeSlideIndex);
+                }
+                if (currentUser === ADMIN_USER) {
+                    renderAdminUserList();
+                }
+                isSyncing = false;
+            }
+        });
+
+        // Gemeinsame Mediathek synchronisieren
+        db.ref('shared_slides').on('value', (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                localStorage.setItem('werbung_pro_shared_slides', JSON.stringify(data));
+                renderSharedSlides();
+            }
+        });
+    }
+
+    // Speichern-Funktionen (Schreiben in LocalStorage UND Firebase DB)
+    function saveAccounts(accounts) { 
+        localStorage.setItem('werbung_pro_accounts', JSON.stringify(accounts)); 
+        if (!isSyncing) {
+            db.ref('accounts').set(accounts); 
+        }
+    }
+    
+    function saveSharedSlides(slides) { 
+        localStorage.setItem('werbung_pro_shared_slides', JSON.stringify(slides)); 
+        db.ref('shared_slides').set(slides); 
+    }
+
     function getAccounts() { return JSON.parse(localStorage.getItem('werbung_pro_accounts')) || {}; }
-    function saveAccounts(accounts) { localStorage.setItem('werbung_pro_accounts', JSON.stringify(accounts)); }
+    function getSharedSlides() { return JSON.parse(localStorage.getItem('werbung_pro_shared_slides')) || []; }
 
-    function initAdminAccount() {
-        let accounts = getAccounts();
-        if (!accounts[ADMIN_USER] || accounts[ADMIN_USER].password !== ADMIN_PASS) {
-            accounts[ADMIN_USER] = {
-                password: ADMIN_PASS,
-                liveUrl: "https://docs.google.com/presentation/d/e/2PACX-1vQYSDiNWgoUySOYEu1qDTetowoaZc7hbNeWHeG8gMveqpJRoWj_qr9QNpmiwHGo1AR9n80qi9nXCbm8/pub?start=true&loop=true&delayms=10000",
-                editUrl: DEFAULT_EDIT_URL,
-                defaults: { font: "Poppins", size: "45", textColor: "#ffffff", outlineColor: "#a855f7", effect: "fade" },
-                slides: [{
-                    title: "Willkommen",
-                    text: "Admin Dashboard\nStudio-Zentrale", font: "Poppins", size: "45", textColor: "#ffffff", outlineColor: "#a855f7", effect: "fade", direction: "bottom", duration: "0.8", pause: "5", posX: "50", posY: "70", mediaData: null, mediaType: null, aspectRatio: "16/9", textPosition: "inside", imageStyle: "normal"
-                }]
-            };
-            saveAccounts(accounts);
-        }
-    }
-
-    function getSavedProfiles() {
-        try {
-            const data = localStorage.getItem('werbung_pro_saved_profiles');
-            return data ? JSON.parse(data) : [];
-        } catch (e) { return []; }
-    }
-
-    function saveSavedProfiles(profiles) { localStorage.setItem('werbung_pro_saved_profiles', JSON.stringify(profiles)); }
-
-    function rememberProfile(username) {
-        let profiles = getSavedProfiles();
-        if (!profiles.includes(username)) {
-            profiles.push(username);
-            saveSavedProfiles(profiles);
-        }
-        renderSavedProfiles();
-    }
-
-    function renderSavedProfiles() {
-        const profiles = getSavedProfiles();
-        const section = document.getElementById('savedProfilesSection');
-        const container = document.getElementById('savedProfilesContainer');
-        
-        if (profiles.length === 0) { section.style.display = 'none'; return; }
-        
-        section.style.display = 'block'; container.innerHTML = "";
-        profiles.forEach(username => {
-            const badge = document.createElement('div'); badge.className = "profile-badge";
-            badge.onclick = (e) => {
-                if (e.target.closest('.remove-profile-btn')) return;
-                document.getElementById('loginUsername').value = username;
-                document.getElementById('loginPassword').value = "";
-                document.getElementById('loginPassword').focus();
-            };
-            badge.innerHTML = `<span>👤 ${username}</span><button class="remove-profile-btn" title="Nur aus Ansicht entfernen">×</button>`;
-            badge.querySelector('.remove-profile-btn').onclick = (e) => { e.stopPropagation(); removeProfileFromView(username); };
-            container.appendChild(badge);
-        });
-    }
-
-    function removeProfileFromView(username) {
-        let profiles = getSavedProfiles(); profiles = profiles.filter(p => p !== username);
-        saveSavedProfiles(profiles); renderSavedProfiles();
-    }
-
-    function handleLogin() {
-        const u = document.getElementById('loginUsername').value.trim();
-        const p = document.getElementById('loginPassword').value.trim();
-        const errorDiv = document.getElementById('authError');
-
-        if (u === ADMIN_USER && p === ADMIN_PASS) { errorDiv.textContent = ""; rememberProfile(u); loginUser(u); return; }
-
-        let accounts = getAccounts();
-        if(!accounts[u] || accounts[u].password !== p) { errorDiv.textContent = "Falscher Benutzername oder Passwort!"; return; }
-
-        errorDiv.textContent = ""; rememberProfile(u); loginUser(u);
-    }
-
-    function loginUser(username) {
-        currentUser = username;
-        localStorage.setItem('werbung_pro_logged_in_user', username);
-        
-        document.getElementById('gatekeeperOverlay').style.display = 'none';
-        document.getElementById('mainAppLayout').style.display = 'flex';
-        document.getElementById('profileUserLabel').textContent = `👤 ${username}`;
-        
-        if (username === ADMIN_USER) {
-            document.getElementById('p-group-admin').style.display = 'block';
-            renderAdminUserList();
-        } else {
-            document.getElementById('p-group-admin').style.display = 'none';
-        }
-
-        let accounts = getAccounts(); let userAcc = accounts[username];
-        
-        document.getElementById('profileLiveUrl').value = userAcc.liveUrl || "https://docs.google.com/presentation/d/e/2PACX-1vQYSDiNWgoUySOYEu1qDTetowoaZc7hbNeWHeG8gMveqpJRoWj_qr9QNpmiwHGo1AR9n80qi9nXCbm8/pub?start=true&loop=true&delayms=10000";
-        document.getElementById('profileEditUrl').value = userAcc.editUrl || DEFAULT_EDIT_URL;
-        
-        let defs = userAcc.defaults || { font: "Poppins", size: "50", textColor: "#ffffff", outlineColor: "#000000", effect: "fly" };
-        document.getElementById('defFont').value = defs.font;
-        document.getElementById('defSize').value = defs.size;
-        document.getElementById('defColor').value = defs.textColor;
-        document.getElementById('defEffect').value = defs.effect;
-
-        savedSlides = userAcc.slides || [];
-        activeSlideIndex = 0;
-
-        loadSlideIntoEditor(activeSlideIndex);
-        renderSharedSlides();
-    }
-
-    function handleLogout() {
-        currentUser = null; localStorage.removeItem('werbung_pro_logged_in_user');
-        document.getElementById('gatekeeperOverlay').style.display = 'flex';
-        document.getElementById('mainAppLayout').style.display = 'none';
-        document.getElementById('loginUsername').value = ""; document.getElementById('loginPassword').value = "";
-        document.getElementById('slideText').value = ""; document.getElementById('slideTitle').value = "";
-        document.getElementById('profileDropdown').classList.remove('active');
-        loadedImage = null; mediaType = null; hiddenVideo.src = "";
-        renderSavedProfiles();
-    }
-
-    function checkUserSession() {
-        const sessionUser = localStorage.getItem('werbung_pro_logged_in_user');
-        if(sessionUser) loginUser(sessionUser); else handleLogout();
-    }
-
-    function renderAdminUserList() {
-        const container = document.getElementById('adminUserListContainer'); container.innerHTML = "";
-        let accounts = getAccounts();
-        
-        Object.keys(accounts).forEach(username => {
-            const row = document.createElement('div'); row.className = "admin-user-row";
-            row.innerHTML = `
-                <span class="admin-user-name">${username} ${username === ADMIN_USER ? '(Admin)' : ''}</span>
-                <div>
-                    <button class="admin-action-btn edit" title="Benutzername ändern"><i class="fa-solid fa-user-pen"></i></button>
-                    <button class="admin-action-btn delete" title="Konto komplett löschen" ${username === ADMIN_USER ? 'disabled' : ''}><i class="fa-solid fa-user-minus"></i></button>
-                </div>
-            `;
-            row.querySelector('.edit').onclick = () => adminEditUser(username);
-            if (username !== ADMIN_USER) { row.querySelector('.delete').onclick = () => adminDeleteUser(username); }
-            container.appendChild(row);
-        });
-    }
-
-    function adminEditUser(oldUsername) {
-        let newUsername = prompt(`Gib einen neuen Benutzernamen für '${oldUsername}' ein:`, oldUsername);
-        if (!newUsername || newUsername.trim() === "" || newUsername.trim() === oldUsername) return;
-        newUsername = newUsername.trim();
-        
-        let accounts = getAccounts();
-        if (accounts[newUsername]) { alert("Dieser Benutzername existiert bereits!"); return; }
-        
-        accounts[newUsername] = accounts[oldUsername]; delete accounts[oldUsername]; saveAccounts(accounts);
-        
-        let profiles = getSavedProfiles();
-        if (profiles.includes(oldUsername)) { profiles = profiles.map(p => p === oldUsername ? newUsername : p); saveSavedProfiles(profiles); }
-        
-        renderAdminUserList(); renderSavedProfiles();
-    }
-
-    function adminDeleteUser(usernameToDelete) {
-        if (!confirm(`Möchtest du das Konto '${usernameToDelete}' wirklich komplett aus der Datenbank löschen?`)) return;
-        let accounts = getAccounts(); delete accounts[usernameToDelete]; saveAccounts(accounts);
-        removeProfileFromView(usernameToDelete); renderAdminUserList();
-    }
-
-    function adminCreateUser() {
-        if (currentUser !== ADMIN_USER) { alert("Keine Berechtigung!"); return; }
-        const newU = document.getElementById('adminNewUsername').value.trim();
-        const newP = document.getElementById('adminNewPassword').value.trim();
-        const msgDiv = document.getElementById('adminPanelMessage');
-
-        if (!newU || !newP) { msgDiv.style.color = "#ef4444"; msgDiv.textContent = "Ausfüllen!"; return; }
-
-        let accounts = getAccounts();
-        if (accounts[newU]) { msgDiv.style.color = "#ef4444"; msgDiv.textContent = "Existiert bereits!"; return; }
-
-        accounts[newU] = {
-            password: newP, liveUrl: "https://docs.google.com/presentation/d/e/2PACX-1vQYSDiNWgoUySOYEu1qDTetowoaZc7hbNeWHeG8gMveqpJRoWj_qr9QNpmiwHGo1AR9n80qi9nXCbm8/pub?start=true&loop=true&delayms=10000", editUrl: DEFAULT_EDIT_URL,
-            defaults: { font: "Poppins", size: "50", textColor: "#ffffff", outlineColor: "#000000", effect: "fly" },
-            slides: [{ title: `Willkommen`, text: `Willkommen\n${newU}`, font: "Poppins", size: "50", textColor: "#ffffff", outlineColor: "#000000", effect: "fly", direction: "bottom", duration: "0.8", pause: "5", posX: "50", posY: "75", mediaData: null, mediaType: null, aspectRatio: "16/9", textPosition: "inside", imageStyle: "normal" }]
-        };
-        saveAccounts(accounts);
-        msgDiv.style.color = "#10b981"; msgDiv.textContent = `✓ '${newU}' erstellt!`;
-        document.getElementById('adminNewUsername').value = ""; document.getElementById('adminNewPassword').value = "";
-        renderAdminUserList();
-    }
-
-    function saveCurrentSlidesToAccount() {
-        if(!currentUser) return;
-        let accounts = getAccounts();
-        if(accounts[currentUser]) { accounts[currentUser].slides = savedSlides; saveAccounts(accounts); }
-    }
-
-    function saveProfileLinks() {
-        if(!currentUser) return;
-        let accounts = getAccounts();
-        if(accounts[currentUser]) {
-            accounts[currentUser].liveUrl = document.getElementById('profileLiveUrl').value;
-            accounts[currentUser].editUrl = document.getElementById('profileEditUrl').value;
-            saveAccounts(accounts);
-        }
-    }
-
-    function saveProfileDefaults() {
-        if(!currentUser) return;
-        let accounts = getAccounts();
-        if(accounts[currentUser]) {
-            accounts[currentUser].defaults = { font: document.getElementById('defFont').value, size: document.getElementById('defSize').value, textColor: document.getElementById('defColor').value, outlineColor: "#000000", effect: document.getElementById('defEffect').value };
-            saveAccounts(accounts);
-        }
-    }
-
+    // -------------------------------------------------------------
+    // 4. UI STEUERUNG
+    // -------------------------------------------------------------
     function toggleProfileDropdown() { document.getElementById('profileDropdown').classList.toggle('active'); }
 
     function openProfileAccordion(id) {
@@ -787,6 +627,156 @@
         if (!isActive) element.classList.add('active');
     }
 
+    function initAdminAccount() {
+        let accounts = getAccounts();
+        if (!accounts[ADMIN_USER] || accounts[ADMIN_USER].password !== ADMIN_PASS) {
+            accounts[ADMIN_USER] = {
+                password: ADMIN_PASS,
+                liveUrl: DEFAULT_LIVE_URL,
+                editUrl: DEFAULT_EDIT_URL,
+                defaults: { font: "Poppins", size: "45", textColor: "#ffffff", outlineColor: "#a855f7", effect: "fade" },
+                slides: [{ title: "Willkommen", text: "Admin Dashboard\nStudio-Zentrale", font: "Poppins", size: "45", textColor: "#ffffff", outlineColor: "#a855f7", effect: "fade", direction: "bottom", duration: "0.8", pause: "5", posX: "50", posY: "70", mediaData: null, mediaType: null, aspectRatio: "16/9", textPosition: "inside", imageStyle: "normal" }]
+            };
+            saveAccounts(accounts);
+        }
+    }
+
+    function getSavedProfiles() { try { const data = localStorage.getItem('werbung_pro_saved_profiles'); return data ? JSON.parse(data) : []; } catch (e) { return []; } }
+    function saveSavedProfiles(profiles) { localStorage.setItem('werbung_pro_saved_profiles', JSON.stringify(profiles)); }
+
+    function rememberProfile(username) {
+        let profiles = getSavedProfiles();
+        if (!profiles.includes(username)) { profiles.push(username); saveSavedProfiles(profiles); }
+        renderSavedProfiles();
+    }
+
+    function renderSavedProfiles() {
+        const profiles = getSavedProfiles();
+        const section = document.getElementById('savedProfilesSection');
+        const container = document.getElementById('savedProfilesContainer');
+        if (profiles.length === 0) { section.style.display = 'none'; return; }
+        section.style.display = 'block'; container.innerHTML = "";
+        profiles.forEach(username => {
+            const badge = document.createElement('div'); badge.className = "profile-badge";
+            badge.onclick = (e) => {
+                if (e.target.closest('.remove-profile-btn')) return;
+                document.getElementById('loginUsername').value = username;
+                document.getElementById('loginPassword').value = ""; document.getElementById('loginPassword').focus();
+            };
+            badge.innerHTML = `<span>👤 ${username}</span><button class="remove-profile-btn">×</button>`;
+            badge.querySelector('.remove-profile-btn').onclick = (e) => { e.stopPropagation(); removeProfileFromView(username); };
+            container.appendChild(badge);
+        });
+    }
+
+    function removeProfileFromView(username) {
+        let profiles = getSavedProfiles(); profiles = profiles.filter(p => p !== username);
+        saveSavedProfiles(profiles); renderSavedProfiles();
+    }
+
+    function handleLogin() {
+        const u = document.getElementById('loginUsername').value.trim();
+        const p = document.getElementById('loginPassword').value.trim();
+        const errorDiv = document.getElementById('authError');
+        if (u === ADMIN_USER && p === ADMIN_PASS) { errorDiv.textContent = ""; rememberProfile(u); loginUser(u); return; }
+        let accounts = getAccounts();
+        if(!accounts[u] || accounts[u].password !== p) { errorDiv.textContent = "Falscher Benutzername oder Passwort!"; return; }
+        errorDiv.textContent = ""; rememberProfile(u); loginUser(u);
+    }
+
+    function loginUser(username) {
+        currentUser = username; localStorage.setItem('werbung_pro_logged_in_user', username);
+        document.getElementById('gatekeeperOverlay').style.display = 'none';
+        document.getElementById('mainAppLayout').style.display = 'flex';
+        document.getElementById('profileUserLabel').textContent = `👤 ${username}`;
+        
+        if (username === ADMIN_USER) { document.getElementById('p-group-admin').style.display = 'block'; renderAdminUserList(); } 
+        else { document.getElementById('p-group-admin').style.display = 'none'; }
+
+        let accounts = getAccounts(); let userAcc = accounts[username];
+        document.getElementById('profileLiveUrl').value = userAcc.liveUrl || DEFAULT_LIVE_URL;
+        document.getElementById('profileEditUrl').value = userAcc.editUrl || DEFAULT_EDIT_URL;
+        
+        let defs = userAcc.defaults || { font: "Poppins", size: "50", textColor: "#ffffff", outlineColor: "#000000", effect: "fly" };
+        document.getElementById('defFont').value = defs.font;
+        document.getElementById('defSize').value = defs.size; document.getElementById('defColor').value = defs.textColor;
+        document.getElementById('defEffect').value = defs.effect;
+
+        savedSlides = userAcc.slides || []; activeSlideIndex = 0;
+        loadSlideIntoEditor(activeSlideIndex); renderSharedSlides();
+    }
+
+    function handleLogout() {
+        currentUser = null; localStorage.removeItem('werbung_pro_logged_in_user');
+        document.getElementById('gatekeeperOverlay').style.display = 'flex'; document.getElementById('mainAppLayout').style.display = 'none';
+        document.getElementById('loginUsername').value = ""; document.getElementById('loginPassword').value = "";
+        document.getElementById('slideText').value = ""; document.getElementById('slideTitle').value = "";
+        document.getElementById('profileDropdown').classList.remove('active'); loadedImage = null; mediaType = null; hiddenVideo.src = "";
+        renderSavedProfiles();
+    }
+
+    function checkUserSession() {
+        const sessionUser = localStorage.getItem('werbung_pro_logged_in_user');
+        if(sessionUser) loginUser(sessionUser); else handleLogout();
+    }
+
+    function renderAdminUserList() {
+        const container = document.getElementById('adminUserListContainer'); container.innerHTML = "";
+        let accounts = getAccounts();
+        Object.keys(accounts).forEach(username => {
+            const row = document.createElement('div'); row.className = "admin-user-row";
+            row.innerHTML = `<span class="admin-user-name">${username} ${username === ADMIN_USER ? '(Admin)' : ''}</span><div><button class="admin-action-btn edit"><i class="fa-solid fa-user-pen"></i></button><button class="admin-action-btn delete" ${username === ADMIN_USER ? 'disabled' : ''}><i class="fa-solid fa-user-minus"></i></button></div>`;
+            row.querySelector('.edit').onclick = () => adminEditUser(username);
+            if (username !== ADMIN_USER) { row.querySelector('.delete').onclick = () => adminDeleteUser(username); }
+            container.appendChild(row);
+        });
+    }
+
+    function adminEditUser(oldUsername) {
+        let newUsername = prompt(`Gib einen neuen Benutzernamen für '${oldUsername}' ein:`, oldUsername);
+        if (!newUsername || newUsername.trim() === "" || newUsername.trim() === oldUsername) return;
+        newUsername = newUsername.trim(); let accounts = getAccounts();
+        if (accounts[newUsername]) { alert("Dieser Benutzername existiert bereits!"); return; }
+        accounts[newUsername] = accounts[oldUsername]; delete accounts[oldUsername]; saveAccounts(accounts);
+        let profiles = getSavedProfiles(); if (profiles.includes(oldUsername)) { profiles = profiles.map(p => p === oldUsername ? newUsername : p); saveSavedProfiles(profiles); }
+        renderAdminUserList(); renderSavedProfiles();
+    }
+
+    function adminDeleteUser(usernameToDelete) {
+        if (!confirm(`Konto '${usernameToDelete}' wirklich löschen?`)) return;
+        let accounts = getAccounts(); delete accounts[usernameToDelete]; saveAccounts(accounts);
+        removeProfileFromView(usernameToDelete); renderAdminUserList();
+    }
+
+    function adminCreateUser() {
+        if (currentUser !== ADMIN_USER) { alert("Keine Berechtigung!"); return; }
+        const newU = document.getElementById('adminNewUsername').value.trim(); const newP = document.getElementById('adminNewPassword').value.trim();
+        const msgDiv = document.getElementById('adminPanelMessage');
+        if (!newU || !newP) { msgDiv.style.color = "#ef4444"; msgDiv.textContent = "Ausfüllen!"; return; }
+        let accounts = getAccounts(); if (accounts[newU]) { msgDiv.style.color = "#ef4444"; msgDiv.textContent = "Existiert bereits!"; return; }
+        accounts[newU] = { password: newP, liveUrl: DEFAULT_LIVE_URL, editUrl: DEFAULT_EDIT_URL, defaults: { font: "Poppins", size: "50", textColor: "#ffffff", outlineColor: "#000000", effect: "fly" }, slides: [{ title: `Willkommen`, text: `Willkommen\n${newU}`, font: "Poppins", size: "50", textColor: "#ffffff", outlineColor: "#000000", effect: "fly", direction: "bottom", duration: "0.8", pause: "5", posX: "50", posY: "75", mediaData: null, mediaType: null, aspectRatio: "16/9", textPosition: "inside", imageStyle: "normal" }] };
+        saveAccounts(accounts); msgDiv.style.color = "#10b981"; msgDiv.textContent = `✓ '${newU}' erstellt!`;
+        document.getElementById('adminNewUsername').value = ""; document.getElementById('adminNewPassword').value = ""; renderAdminUserList();
+    }
+
+    function saveCurrentSlidesToAccount() {
+        if(!currentUser) return; let accounts = getAccounts();
+        if(accounts[currentUser]) { accounts[currentUser].slides = savedSlides; saveAccounts(accounts); }
+    }
+
+    function saveProfileLinks() {
+        if(!currentUser) return; let accounts = getAccounts();
+        if(accounts[currentUser]) { accounts[currentUser].liveUrl = document.getElementById('profileLiveUrl').value; accounts[currentUser].editUrl = document.getElementById('profileEditUrl').value; saveAccounts(accounts); }
+    }
+
+    function saveProfileDefaults() {
+        if(!currentUser) return; let accounts = getAccounts();
+        if(accounts[currentUser]) { accounts[currentUser].defaults = { font: document.getElementById('defFont').value, size: document.getElementById('defSize').value, textColor: document.getElementById('defColor').value, outlineColor: "#000000", effect: document.getElementById('defEffect').value }; saveAccounts(accounts); }
+    }
+
+    // -------------------------------------------------------------
+    // 5. EDITOR & CANVAS ENGINE
+    // -------------------------------------------------------------
     function handleFileSelect(input) {
         const file = input.files[0]; if (!file) return;
         document.getElementById('dropZoneText').textContent = file.name;
@@ -797,16 +787,40 @@
             if (file.type.startsWith('video')) {
                 mediaType = 'video'; loadedImage = null; hiddenVideo.src = dataUrl;
                 hiddenVideo.onloadedmetadata = () => { autoSaveAndRefresh(); hiddenVideo.play(); renderVideoLoop(); };
+                
+                // Video wird 1:1 gesichert
+                if(savedSlides[activeSlideIndex]) {
+                    savedSlides[activeSlideIndex].mediaData = dataUrl;
+                    savedSlides[activeSlideIndex].mediaType = mediaType;
+                    savedSlides[activeSlideIndex].mediaName = file.name;
+                }
+                saveCurrentSlidesToAccount();
             } else {
                 mediaType = 'image'; hiddenVideo.pause(); const img = new Image();
-                img.onload = () => { loadedImage = img; autoSaveAndRefresh(); }; img.src = dataUrl;
+                img.onload = () => { 
+                    // BILD KOMPRIMIERUNG BEVOR ES IN FIREBASE GEHT (WICHTIG FÜR PERORMANCE)
+                    const maxDim = 1200; let w = img.width; let h = img.height;
+                    if (w > maxDim || h > maxDim) {
+                        if (w > h) { h = Math.round((h * maxDim) / w); w = maxDim; }
+                        else { w = Math.round((w * maxDim) / h); h = maxDim; }
+                    }
+                    const tempCanvas = document.createElement('canvas'); tempCanvas.width = w; tempCanvas.height = h;
+                    const tempCtx = tempCanvas.getContext('2d'); tempCtx.drawImage(img, 0, 0, w, h);
+                    const compressedDataUrl = tempCanvas.toDataURL('image/jpeg', 0.7); // 70% JPEG Qualität für Datenbank
+
+                    loadedImage = new Image();
+                    loadedImage.onload = () => { autoSaveAndRefresh(); }; 
+                    loadedImage.src = compressedDataUrl;
+
+                    if(savedSlides[activeSlideIndex]) {
+                        savedSlides[activeSlideIndex].mediaData = compressedDataUrl;
+                        savedSlides[activeSlideIndex].mediaType = mediaType;
+                        savedSlides[activeSlideIndex].mediaName = file.name;
+                    }
+                    saveCurrentSlidesToAccount();
+                }; 
+                img.src = dataUrl;
             }
-            if(savedSlides[activeSlideIndex]) {
-                savedSlides[activeSlideIndex].mediaData = dataUrl;
-                savedSlides[activeSlideIndex].mediaType = mediaType;
-                savedSlides[activeSlideIndex].mediaName = file.name;
-            }
-            saveCurrentSlidesToAccount();
         };
         reader.readAsDataURL(file);
     }
@@ -816,8 +830,7 @@
         let defs = (accounts[currentUser] && accounts[currentUser].defaults) ? accounts[currentUser].defaults : { font: "Poppins", size: "50", textColor: "#ffffff", outlineColor: "#000000", effect: "fly" };
         
         const newSlide = { 
-            title: "Neue Folie", 
-            text: "Neue Folie\nTippe hier", font: defs.font || "Poppins", size: defs.size || "50", textColor: defs.textColor || "#ffffff", outlineColor: defs.outlineColor || "#000000", effect: defs.effect || "fly", 
+            title: "Neue Folie", text: "Neue Folie\nTippe hier", font: defs.font || "Poppins", size: defs.size || "50", textColor: defs.textColor || "#ffffff", outlineColor: defs.outlineColor || "#000000", effect: defs.effect || "fly", 
             direction: "bottom", duration: "0.8", pause: "5", posX: "50", posY: "75",
             mediaData: null, mediaType: null, mediaName: null, aspectRatio: "16/9", textPosition: "inside", imageStyle: "normal"
         };
@@ -846,21 +859,34 @@
         document.getElementById('imageStyle').value = slide.imageStyle || "normal";
 
         if(slide.mediaData && slide.mediaType) {
-            mediaType = slide.mediaType;
-            document.getElementById('dropZoneText').textContent = slide.mediaName || "Datei geladen";
+            mediaType = slide.mediaType; document.getElementById('dropZoneText').textContent = slide.mediaName || "Datei geladen";
             if(mediaType === 'video') {
                 loadedImage = null; hiddenVideo.src = slide.mediaData;
-                hiddenVideo.onloadedmetadata = () => { autoSaveAndRefresh(); hiddenVideo.play(); renderVideoLoop(); };
+                hiddenVideo.onloadedmetadata = () => { if (!isSyncing) autoSaveAndRefresh(); hiddenVideo.play(); renderVideoLoop(); };
             } else {
                 hiddenVideo.pause(); const img = new Image();
-                img.onload = () => { loadedImage = img; autoSaveAndRefresh(); }; img.src = slide.mediaData;
+                img.onload = () => { loadedImage = img; if (!isSyncing) autoSaveAndRefresh(); else handleRatioOrBgChange(); }; img.src = slide.mediaData;
             }
         } else {
             mediaType = null; loadedImage = null; hiddenVideo.src = "";
             document.getElementById('dropZoneText').textContent = "Datei auswählen";
-            autoSaveAndRefresh();
+            if (!isSyncing) autoSaveAndRefresh(); else handleRatioOrBgChange();
         }
         handleEffectChange(); renderSidebar(); updateView();
+    }
+
+    function handleRatioOrBgChange() {
+        const ratio = document.getElementById('aspectRatio').value;
+        let w = 800, h = 450;
+
+        if (ratio === 'original') {
+            if (mediaType === 'video' && hiddenVideo.videoWidth) { w = hiddenVideo.videoWidth; h = hiddenVideo.videoHeight; }
+            else if (loadedImage) { w = loadedImage.width; h = loadedImage.height; }
+        } else if (ratio === '16/9') { w = 800; h = 450; }
+        else if (ratio === '4/3') { w = 800; h = 600; }
+        else if (ratio === '1/1') { w = 600; h = 600; }
+        
+        canvas.width = w; canvas.height = h;
     }
 
     function autoSaveAndRefresh() {
@@ -881,7 +907,20 @@
             savedSlides[activeSlideIndex].textPosition = document.getElementById('textPosition').value;
             savedSlides[activeSlideIndex].imageStyle = document.getElementById('imageStyle').value;
         }
+        handleRatioOrBgChange();
         saveCurrentSlidesToAccount(); renderSidebar(); updateView();
+    }
+
+    function drawMediaCover(targetCtx, element, canvasW, canvasH) {
+        let elW = element.videoWidth || element.width;
+        let elH = element.videoHeight || element.height;
+        let elRatio = elW / elH;
+        let canvasRatio = canvasW / canvasH;
+        let cx, cy, cw, ch;
+        
+        if (elRatio > canvasRatio) { ch = elH; cw = elH * canvasRatio; cx = (elW - cw) / 2; cy = 0; } 
+        else { cw = elW; ch = elW / canvasRatio; cx = 0; cy = (elH - ch) / 2; }
+        targetCtx.drawImage(element, cx, cy, cw, ch, 0, 0, canvasW, canvasH);
     }
 
     function drawFrame(targetCtx, targetCanvas, slide, progress) {
@@ -894,7 +933,6 @@
             else if (ratio === 'image') {
                 if (mediaType === 'video' && hiddenVideo.videoWidth) { tw = hiddenVideo.videoWidth; th = hiddenVideo.videoHeight; }
                 else if (loadedImage) { tw = loadedImage.width; th = loadedImage.height; }
-                else { tw = 800; th = 450; }
             }
             if (targetCanvas.width !== tw || targetCanvas.height !== th) { targetCanvas.width = tw; targetCanvas.height = th; }
         } else if (!targetCanvas.width) { targetCanvas.width = 800; targetCanvas.height = 450; }
@@ -1004,24 +1042,19 @@
 
     function openGoogleSlidesPresentation() { let link = document.getElementById('profileLiveUrl').value.trim(); if (link) window.open(link, '_blank'); }
     function openGoogleSlidesEditor() { let link = document.getElementById('profileEditUrl').value.trim(); if (link) window.open(link, '_blank'); }
-    function getSharedSlides() { return JSON.parse(localStorage.getItem('werbung_pro_shared_slides')) || []; }
-    function saveSharedSlides(slides) { localStorage.setItem('werbung_pro_shared_slides', JSON.stringify(slides)); }
 
     function shareCurrentSlide() {
         const currentSlide = savedSlides[activeSlideIndex]; if(!currentSlide) return;
         let sharedPool = getSharedSlides();
         const newSharedItem = { ...currentSlide, id: Date.now() + Math.random().toString(36).substr(2, 5), author: currentUser };
         sharedPool.unshift(newSharedItem); saveSharedSlides(sharedPool);
-        alert("🎉 Folie samt Design geteilt!"); renderSharedSlides();
+        alert("🎉 Folie für die Mediathek freigegeben!"); renderSharedSlides();
     }
 
     function renderSharedSlides() {
         const container = document.getElementById('sharedListContainer'); container.innerHTML = "";
         const pool = getSharedSlides();
-        if(pool.length === 0) {
-            container.innerHTML = `<span style="font-style:italic; font-size:13px; color:var(--text-sub); text-align:center; display:block; margin-top:5px;">Keine geteilten Folien.</span>`;
-            return;
-        }
+        if(pool.length === 0) { container.innerHTML = `<span style="font-style:italic; font-size:13px; color:var(--text-sub); text-align:center; display:block; margin-top:15px;">Keine geteilten Folien.</span>`; return; }
         pool.forEach((item, index) => {
             const div = document.createElement('div'); div.className = "shared-item";
             const displayTitle = (item.title && item.title.trim() !== "") ? item.title : (item.text.split('\n')[0] || "Folie");
@@ -1035,12 +1068,10 @@
     function addSharedSlideToMyList(sharedSlide) {
         const copiedSlide = { ...sharedSlide }; delete copiedSlide.id; delete copiedSlide.author;
         savedSlides.push(copiedSlide); activeSlideIndex = savedSlides.length - 1;
-        saveCurrentSlidesToAccount(); loadSlideIntoEditor(activeSlideIndex); alert(`📥 Folie inklusive Medien kopiert!`);
+        saveCurrentSlidesToAccount(); loadSlideIntoEditor(activeSlideIndex); alert(`📥 In deine Liste kopiert!`);
     }
 
-    function deleteSharedSlide(index) {
-        let sharedPool = getSharedSlides(); sharedPool.splice(index, 1); saveSharedSlides(sharedPool); renderSharedSlides();
-    }
+    function deleteSharedSlide(index) { let sharedPool = getSharedSlides(); sharedPool.splice(index, 1); saveSharedSlides(sharedPool); renderSharedSlides(); }
 
     function renderSidebar() {
         const container = document.getElementById('slidesListContainer'); container.innerHTML = "";
@@ -1066,46 +1097,71 @@
     function toggleExtraSettings() { document.getElementById('extraSettings').classList.toggle('visible'); }
     function handleEffectChange() { document.getElementById('directionWrapper').style.display = (document.getElementById('animEffect').value === 'fly') ? 'block' : 'none'; autoSaveAndRefresh(); }
     function renderVideoLoop() { if (mediaType === 'video' && currentUser && !isPlayingAnimation) { drawFrame(ctx, canvas, savedSlides[activeSlideIndex], 1.0); requestAnimationFrame(renderVideoLoop); } }
-    function updateView() { if (mediaType !== 'video') drawFrame(ctx, canvas, savedSlides[activeSlideIndex], 1.0); }
+    function updateView() { if (!isPlayingAnimation && mediaType !== 'video') drawFrame(ctx, canvas, savedSlides[activeSlideIndex], 1.0); }
 
     function triggerPreviewAnimation() {
-        isPlayingAnimation = true; let start = performance.now(); let dur = parseFloat(document.getElementById('animDuration').value) * 1000;
-        function loop(now) {
-            let p = Math.min((now - start) / dur, 1.0); drawFrame(ctx, canvas, savedSlides[activeSlideIndex], p);
-            if (p < 1.0) requestAnimationFrame(loop); else { isPlayingAnimation = false; setTimeout(() => updateView(), 400); }
-        }
-        requestAnimationFrame(loop);
+        if (isPlayingAnimation) return; isPlayingAnimation = true;
+        const slide = savedSlides[activeSlideIndex]; if (!slide) { isPlayingAnimation = false; return; }
+        const dur = parseFloat(slide.duration) * 1000; const fps = 35; const interval = 1000 / fps; const totalFrames = Math.max(1, Math.round(dur / interval)); let currentFrame = 0;
+        let animTimer = setInterval(() => {
+            currentFrame++; let p = currentFrame / totalFrames; if (p > 1.0) p = 1.0;
+            drawFrame(ctx, canvas, slide, p);
+            if (currentFrame >= totalFrames) { clearInterval(animTimer); isPlayingAnimation = false; setTimeout(updateView, 100); }
+        }, interval);
     }
+
+    async function triggerNativeCast() {
+        try { const nav = navigator; if (nav.presentation && nav.presentation.defaultRequest) { nav.presentation.defaultRequest.start(); } else { alert("Übertragung wird gestartet! Vergewissere dich, dass deine Streaming-Box (Chromecast/HDMI-Receiver) eingeschaltet ist."); } } catch(e) { alert("Box wird gesucht... Bitte im selben WLAN-Netzwerk anmelden."); }
+    }
+
+    function triggerFastDownload() { if(exportBlob) { const a = document.createElement('a'); a.href = URL.createObjectURL(exportBlob); a.download = exportFileName; a.click(); document.getElementById('downloadBox').style.display = "none"; } }
 
     function processExport() {
-        const format = document.getElementById('exportFormatSelect').value; const msg = document.getElementById('statusMessage');
-        msg.style.display = 'block'; document.getElementById('downloadBox').style.display = 'none';
+        const fmt = document.getElementById('exportFormatSelect').value;
+        const status = document.getElementById('statusMessage'); const dl = document.getElementById('downloadBox');
+        status.style.display = 'block'; status.className = "status progress"; status.textContent = "🎬 Generiere exportierte Datei... Bitte warten."; dl.style.display = 'none';
 
-        if (format === 'image') {
-            msg.textContent = "⏳ Erzeuge Bild... ⏳"; msg.className = "status progress"; drawFrame(ctx, canvas, savedSlides[activeSlideIndex], 1.0);
-            canvas.toBlob((blob) => { exportBlob = blob; exportFileName = `werbung_folie_${activeSlideIndex+1}.png`; msg.textContent = "✓ Bild erfolgreich generiert!"; msg.className = "status success"; document.getElementById('downloadBox').style.display = 'block'; }, 'image/png');
-        } else if (format === 'gif') {
-            msg.textContent = "⏳ Rendere GIF-Schleife... ⏳"; msg.className = "status progress";
-            let animDur = parseFloat(document.getElementById('animDuration').value) || 1, pauseDur = parseFloat(document.getElementById('pauseDuration').value) || 5;
-            let frames = [], fps = 20, totalFrames = Math.floor((animDur + pauseDur) * fps);
-            for (let i = 0; i < totalFrames; i++) { let progress = i / (animDur * fps); if (progress > 1.0) progress = 1.0; drawFrame(ctx, canvas, savedSlides[activeSlideIndex], progress); frames.push(canvas.toDataURL('image/jpeg', 0.8)); }
-            gifshot.createGIF({ images: frames, interval: 1 / fps, gifWidth: canvas.width, gifHeight: canvas.height }, function (obj) {
-                if (!obj.error) { fetch(obj.image).then(res => res.blob()).then(blob => { exportBlob = blob; exportFileName = `werbung_folie_${activeSlideIndex+1}.gif`; document.getElementById('downloadBox').style.display = 'block'; msg.textContent = "✓ GIF erfolgreich gerendert!"; msg.className = "status success"; updateView(); }); }
+        const slide = savedSlides[activeSlideIndex];
+        const durSec = parseFloat(slide.duration) || 0.8; const pauseSec = parseFloat(slide.pause) || 4; const totalSec = durSec + pauseSec;
+        const width = canvas.width || 800; const height = canvas.height || 450;
+
+        if (fmt === 'image') {
+            canvas.toBlob(blob => {
+                exportBlob = blob; exportFileName = (slide.title || "export") + ".png";
+                status.className = "status success"; status.textContent = "✅ Bild fertig generiert!"; dl.style.display = 'block';
+            }, 'image/png');
+        } else if (fmt === 'gif') {
+            const frames = []; const fps = 15; const totalFrames = Math.max(10, Math.round(totalSec * fps));
+            const virtualCanvas = document.createElement('canvas'); virtualCanvas.width = width; virtualCanvas.height = height; const vCtx = virtualCanvas.getContext('2d');
+            for(let i=0; i<totalFrames; i++) {
+                let time = i / fps; let p = time / durSec; if (p > 1.0) p = 1.0;
+                drawFrame(vCtx, virtualCanvas, slide, p); frames.push(virtualCanvas.toDataURL('image/jpeg', 0.7));
+            }
+            gifshot.createGIF({ images: frames, gifWidth: width, gifHeight: height, interval: 1/fps, numFrames: totalFrames, sampleInterval: 10 }, function(obj) {
+                if(!obj.error) {
+                    fetch(obj.image).then(res => res.blob()).then(blob => {
+                        exportBlob = blob; exportFileName = (slide.title || "export") + ".gif";
+                        status.className = "status success"; status.textContent = "✅ GIF-Schleife fertig!"; dl.style.display = 'block';
+                    });
+                } else { status.className = "status"; status.textContent = "❌ Fehler bei der GIF-Erstellung."; }
             });
-        } else if (format === 'video') {
-            msg.textContent = "⏳ Zeichne Video auf... ⏳"; msg.className = "status progress";
-            let animDur = parseFloat(document.getElementById('animDuration').value) || 1, pauseDur = parseFloat(document.getElementById('pauseDuration').value) || 5, totalTime = (animDur + pauseDur) * 1000;
-            let stream = canvas.captureStream(25), recorder = new MediaRecorder(stream, { mimeType: 'video/webm' }), chunks = [];
-            recorder.ondataavailable = e => chunks.push(e.data);
-            recorder.onstop = () => { exportBlob = new Blob(chunks, { type: 'video/webm' }); exportFileName = `werbung_folie_${activeSlideIndex+1}.webm`; msg.textContent = "✓ Video erfolgreich aufgezeichnet!"; msg.className = "status success"; document.getElementById('downloadBox').style.display = 'block'; updateView(); };
-            recorder.start(); let start = performance.now();
-            function recordLoop(now) { let elapsed = now - start, progress = elapsed / (animDur * 1000); if (progress > 1.0) progress = 1.0; drawFrame(ctx, canvas, savedSlides[activeSlideIndex], progress); if (elapsed < totalTime) requestAnimationFrame(recordLoop); else recorder.stop(); }
-            requestAnimationFrame(recordLoop);
+        } else if (fmt === 'video') {
+            const fps = 25; const totalFrames = Math.max(10, Math.round(totalSec * fps));
+            const virtualCanvas = document.createElement('canvas'); virtualCanvas.width = width; virtualCanvas.height = height; const vCtx = virtualCanvas.getContext('2d');
+            const stream = virtualCanvas.captureStream(fps); const recorder = new MediaRecorder(stream, { mimeType: 'video/webm;codecs=vp9' }); const chunks = [];
+            recorder.ondataavailable = e => { if (e.data.size > 0) chunks.push(e.data); };
+            recorder.onstop = () => {
+                exportBlob = new Blob(chunks, { type: 'video/webm' }); exportFileName = (slide.title || "export") + ".webm";
+                status.className = "status success"; status.textContent = "✅ Video (.webm) erfolgreich exportiert!"; dl.style.display = 'block';
+            };
+            recorder.start(); let frameCount = 0;
+            let exportTimer = setInterval(() => {
+                let time = frameCount / fps; let p = time / durSec; if (p > 1.0) p = 1.0;
+                drawFrame(vCtx, virtualCanvas, slide, p); frameCount++;
+                if (frameCount >= totalFrames) { clearInterval(exportTimer); recorder.stop(); }
+            }, 1000 / fps);
         }
     }
-
-    function triggerFastDownload() { if (!exportBlob) return; const a = document.createElement('a'); a.href = URL.createObjectURL(exportBlob); a.download = exportFileName; a.click(); }
-    function triggerNativeCast() { alert("Nutze Chrome, gehe ins Menü (drei Punkte) -> Streamen, Speichern und Teilen -> Streamen, jetzt wähle die Chromebox aus."); }
 </script>
 </body>
 </html>
