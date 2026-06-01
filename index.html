@@ -450,6 +450,7 @@
                             <option value="16/9">16:9 (Standard)</option>
                             <option value="4/3">4:3</option>
                             <option value="1/1">1:1 (Quadrat)</option>
+                            <option value="9/16">9:16 (Hochformat / Portrait)</option>
                             <option value="image">Wie Bild (Original)</option>
                         </select>
                     </div>
@@ -798,7 +799,7 @@
             } else {
                 mediaType = 'image'; hiddenVideo.pause(); const img = new Image();
                 img.onload = () => { 
-                    // BILD KOMPRIMIERUNG BEVOR ES IN FIREBASE GEHT (WICHTIG FÜR PERORMANCE)
+                    // BILD KOMPRIMIERUNG BEVOR ES IN FIREBASE GEHT (WICHTIG FÜR PERFORMANCE)
                     const maxDim = 1200; let w = img.width; let h = img.height;
                     if (w > maxDim || h > maxDim) {
                         if (w > h) { h = Math.round((h * maxDim) / w); w = maxDim; }
@@ -879,12 +880,13 @@
         const ratio = document.getElementById('aspectRatio').value;
         let w = 800, h = 450;
 
-        if (ratio === 'original') {
+        if (ratio === 'image') {
             if (mediaType === 'video' && hiddenVideo.videoWidth) { w = hiddenVideo.videoWidth; h = hiddenVideo.videoHeight; }
             else if (loadedImage) { w = loadedImage.width; h = loadedImage.height; }
         } else if (ratio === '16/9') { w = 800; h = 450; }
         else if (ratio === '4/3') { w = 800; h = 600; }
         else if (ratio === '1/1') { w = 600; h = 600; }
+        else if (ratio === '9/16') { w = 450; h = 800; }
         
         canvas.width = w; canvas.height = h;
     }
@@ -930,6 +932,7 @@
             if (ratio === '16/9') { tw = 800; th = 450; }
             else if (ratio === '4/3') { tw = 800; th = 600; }
             else if (ratio === '1/1') { tw = 600; th = 600; }
+            else if (ratio === '9/16') { tw = 450; th = 800; }
             else if (ratio === 'image') {
                 if (mediaType === 'video' && hiddenVideo.videoWidth) { tw = hiddenVideo.videoWidth; th = hiddenVideo.videoHeight; }
                 else if (loadedImage) { tw = loadedImage.width; th = loadedImage.height; }
