@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Werbung Pro — Studio</title>
+    <title>T>ipsArena_Werbung</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -51,31 +51,28 @@
             box-sizing: border-box; transition: background-color 0.4s ease, color 0.4s ease;
         }
 
-        #gatekeeperOverlay {
+        /* OVERLAYS & MODALS */
+        .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: var(--bg-color); z-index: 9999;
+            background: rgba(0,0,0,0.6); backdrop-filter: blur(5px);
             display: flex; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box;
+            z-index: 9999;
         }
         .login-card {
             background: var(--card-bg); border: 1px solid var(--card-border);
-            padding: 35px; border-radius: 28px; box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+            padding: 35px; border-radius: 28px; box-shadow: 0 20px 50px rgba(0,0,0,0.2);
             width: 100%; max-width: 440px; text-align: center; backdrop-filter: blur(20px);
         }
+        .modal-box {
+            background: var(--card-bg); border: 1px solid var(--card-border);
+            padding: 30px; border-radius: 24px; box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            width: 100%; max-width: 650px; backdrop-filter: blur(20px);
+            display: flex; flex-direction: column; max-height: 90vh;
+        }
 
-        .saved-profiles-section {
-            margin-bottom: 20px;
-            text-align: left;
-            background: rgba(0, 0, 0, 0.03);
-            padding: 12px;
-            border-radius: 16px;
-            border: 1px solid var(--card-border);
-        }
+        .saved-profiles-section { margin-bottom: 20px; text-align: left; background: rgba(0, 0, 0, 0.03); padding: 12px; border-radius: 16px; border: 1px solid var(--card-border); }
         .profiles-flex { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
-        .profile-badge {
-            background: var(--input-bg); border: 1px solid var(--card-border); border-radius: 20px; padding: 6px 12px;
-            display: inline-flex; align-items: center; gap: 8px; cursor: pointer; transition: all 0.2s ease;
-            user-select: none; box-shadow: 0 2px 6px rgba(0,0,0,0.04);
-        }
+        .profile-badge { background: var(--input-bg); border: 1px solid var(--card-border); border-radius: 20px; padding: 6px 12px; display: inline-flex; align-items: center; gap: 8px; cursor: pointer; transition: all 0.2s ease; user-select: none; box-shadow: 0 2px 6px rgba(0,0,0,0.04); }
         .profile-badge:hover { transform: translateY(-1px); border-color: var(--accent); }
         .profile-badge span { font-weight: 600; font-size: 13px; }
         .remove-profile-btn { background: none; border: none; color: var(--text-sub); font-size: 16px; cursor: pointer; padding: 0 2px; line-height: 1; display: flex; align-items: center; justify-content: center; }
@@ -89,20 +86,21 @@
         .panel { background: var(--card-bg); backdrop-filter: blur(12px); border: 1px solid var(--card-border); padding: 25px; border-radius: 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); width: 100%; max-width: 420px; box-sizing: border-box; }
         .preview-panel { background: var(--card-bg); backdrop-filter: blur(12px); border: 1px solid var(--card-border); padding: 25px; border-radius: 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); width: 100%; flex: 1; max-width: 550px; display: flex; flex-direction: column; align-items: center; box-sizing: border-box; }
 
-        .slides-list { display: flex; flex-direction: column; gap: 10px; max-height: 250px; overflow-y: auto; padding-right: 5px; }
-        .slide-item { background: var(--input-bg); border: 1px solid var(--card-border); padding: 12px 15px; border-radius: 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: all 0.2s ease; }
-        .slide-item:hover { transform: translateY(-2px); border-color: var(--accent); }
+        .slides-list { display: flex; flex-direction: column; gap: 10px; overflow-y: auto; padding-right: 5px; flex: 1; }
+        .slide-item { background: var(--input-bg); border: 1px solid var(--card-border); padding: 16px 20px; border-radius: 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: all 0.2s ease; margin-bottom: 8px; }
+        .slide-item:hover { transform: translateY(-2px); border-color: var(--accent); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
         .slide-item.active { border-color: #10b981; background: rgba(16, 185, 129, 0.1); }
-        .slide-item-title { font-weight: 600; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 160px; pointer-events: none; }
-        .slide-action-btn { background: rgba(239, 68, 68, 0.1); border: none; color: var(--delete-color); cursor: pointer; padding: 8px 10px; border-radius: 8px; font-size: 13px; transition: all 0.2s; display: flex; align-items: center; justify-content: center; }
+        .slide-item-title { font-weight: 600; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 350px; pointer-events: none; }
+        .slide-action-btn { background: rgba(239, 68, 68, 0.1); border: none; color: var(--delete-color); cursor: pointer; padding: 10px 12px; border-radius: 8px; font-size: 14px; transition: all 0.2s; display: flex; align-items: center; justify-content: center; }
         .slide-action-btn:hover { background: var(--delete-color); color: white; transform: scale(1.05); }
 
-        .shared-list { display: flex; flex-direction: column; gap: 10px; max-height: 250px; overflow-y: auto; padding-right: 5px; }
-        .shared-item { background: var(--input-bg); border: 1px solid var(--card-border); padding: 12px 15px; border-radius: 14px; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
-        .shared-item-info { display: flex; flex-direction: column; gap: 2px; overflow: hidden; }
-        .shared-item-title { font-weight: 600; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 140px; color: var(--text-main); }
-        .shared-item-author { font-size: 11px; color: var(--accent); font-weight: 700; display: flex; align-items: center; gap: 4px; }
-        .btn-add-shared { background: rgba(59, 130, 246, 0.1); border: none; color: var(--accent); padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; }
+        .shared-list { display: flex; flex-direction: column; gap: 10px; overflow-y: auto; padding-right: 5px; flex: 1; }
+        .shared-item { background: var(--input-bg); border: 1px solid var(--card-border); padding: 16px 20px; border-radius: 14px; display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 8px; transition: all 0.2s; }
+        .shared-item:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .shared-item-info { display: flex; flex-direction: column; gap: 4px; overflow: hidden; }
+        .shared-item-title { font-weight: 600; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 300px; color: var(--text-main); }
+        .shared-item-author { font-size: 12px; color: var(--accent); font-weight: 700; display: flex; align-items: center; gap: 4px; }
+        .btn-add-shared { background: rgba(59, 130, 246, 0.1); border: none; color: var(--accent); padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; transition: 0.2s; }
         .btn-add-shared:hover { background: var(--accent); color: white; }
 
         .admin-box-embedded { border-radius: 16px; padding: 15px; margin-top: 5px; box-sizing: border-box; color: white; }
@@ -116,7 +114,8 @@
         .top-menu-container { position: fixed; top: 15px; right: 15px; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; z-index: 1000; pointer-events: none; }
         .top-left-container { position: fixed; top: 15px; left: 15px; display: flex; flex-direction: column; align-items: flex-start; gap: 10px; z-index: 1000; pointer-events: none; }
         .button-row { display: flex; gap: 12px; pointer-events: auto; }
-        .menu-btn { background: var(--card-bg); border: 1px solid var(--card-border); color: var(--text-main); width: 44px; height: 44px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .menu-btn { background: var(--card-bg); border: 1px solid var(--card-border); color: var(--text-main); width: 44px; height: 44px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: transform 0.2s; }
+        .menu-btn:hover { transform: scale(1.05); }
 
         .paint-palette { background: var(--card-bg); border: 1px solid var(--card-border); padding: 14px; border-radius: 20px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); opacity: 0; transform: translateY(-10px); pointer-events: none; transition: all 0.3s ease; width: max-content; }
         .paint-palette.active { opacity: 1; transform: translateY(0); pointer-events: auto; }
@@ -125,12 +124,18 @@
         .profile-dropdown { background: var(--card-bg); border: 1px solid var(--card-border); padding: 20px; border-radius: 24px; box-shadow: 0 15px 45px rgba(0,0,0,0.2); opacity: 0; transform: translateY(-10px); pointer-events: none; transition: all 0.3s ease; width: 340px; backdrop-filter: blur(20px); max-height: 85vh; overflow-y: auto; }
         .profile-dropdown.active { opacity: 1; transform: translateY(0); pointer-events: auto; }
 
-        .profile-acc-group { border-bottom: 1px solid var(--card-border); padding: 12px 0; overflow: hidden; }
+        .profile-acc-group { border-bottom: 1px solid var(--card-border); padding: 12px 0; overflow: hidden; transition: background 0.2s; }
         .profile-acc-group:last-child { border-bottom: none; }
         .profile-acc-group.no-border-top { border-top: none; padding-top: 0; }
         .profile-acc-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; user-select: none; }
         .profile-acc-header h3 { font-size: 13px; margin: 0; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.5px; }
         .profile-acc-icon { font-size: 11px; color: var(--text-sub); background: var(--input-bg); padding: 4px 10px; border-radius: 6px; border: 1px solid var(--card-border); transition: transform 0.3s; }
+        
+        .profile-btn-row { cursor: pointer; display: flex; justify-content: space-between; align-items: center; padding: 12px 10px; border-radius: 8px; transition: background 0.2s; margin-bottom: 5px; }
+        .profile-btn-row:hover { background: rgba(0, 0, 0, 0.04); }
+        .profile-btn-row h3 { font-size: 13px; margin: 0; font-weight: 700; color: var(--text-main); text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 10px; }
+        .profile-btn-row i { color: var(--accent); font-size: 16px; }
+        
         .profile-acc-content { max-height: 0; opacity: 0; overflow: hidden; transition: max-height 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease; }
         .profile-acc-group.active .profile-acc-content { max-height: 700px; opacity: 1; padding-top: 15px; }
         .profile-acc-group.active .profile-acc-icon { transform: rotate(180deg); }
@@ -145,7 +150,6 @@
         .btn-step:hover { opacity: 0.9; transform: translateY(-1px); }
         .btn-secondary { background: var(--input-bg); color: var(--text-main); border: 1px solid var(--card-border); padding: 10px; border-radius: 10px; cursor: pointer; font-weight: 600; width: 100%; margin-top: 10px; }
 
-        /* Main Panel Accordion */
         .acc-group { border-top: 1px solid var(--card-border); padding: 14px 0; overflow: hidden; }
         .acc-group.no-border { border-top: none; padding-top: 0; }
         .acc-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; user-select: none; }
@@ -169,6 +173,15 @@
         
         .download-box { margin-top: 15px; background: rgba(34, 197, 94, 0.15); border: 2px solid #22c55e; border-radius: 14px; padding: 15px; text-align: center; display: none; cursor: pointer; }
         #hiddenVideo { display: none; }
+
+        /* DRAG AND DROP BOX */
+        .upload-box {
+            border: 2px dashed var(--card-border); border-radius: 12px; padding: 30px 20px; 
+            text-align: center; background: var(--input-bg); cursor: pointer; transition: all 0.3s;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+        }
+        .upload-box.dragover { border-color: var(--accent); background: rgba(59, 130, 246, 0.1); transform: scale(1.02); }
+        .upload-box i { font-size: 30px; color: var(--accent); }
     </style>
 </head>
 <body>
@@ -194,6 +207,29 @@
     </div>
 </div>
 
+<div class="modal-overlay" id="mySlidesModal" style="display: none;">
+    <div class="modal-box">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:1px solid var(--card-border); padding-bottom:15px;">
+            <h2 style="font-size:22px;"><i class="fa-solid fa-layer-group" style="color:var(--accent);"></i> Meine Folien</h2>
+            <button class="btn-secondary" style="margin:0; width:auto; padding:8px 15px;" onclick="closeModal('mySlidesModal')"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <button class="btn-step" style="background: #10b981; padding: 12px; font-size: 15px; margin-bottom: 20px;" onclick="createNewSlide(); closeModal('mySlidesModal');">
+            <i class="fa-solid fa-plus"></i> Neue Folie erstellen
+        </button>
+        <div class="slides-list" id="modalMySlidesList"></div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="sharedSlidesModal" style="display: none;">
+    <div class="modal-box">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:1px solid var(--card-border); padding-bottom:15px;">
+            <h2 style="font-size:22px;"><i class="fa-solid fa-globe" style="color:var(--accent);"></i> Geteilte Folien</h2>
+            <button class="btn-secondary" style="margin:0; width:auto; padding:8px 15px;" onclick="closeModal('sharedSlidesModal')"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="shared-list" id="modalSharedSlidesList"></div>
+    </div>
+</div>
+
 <div id="mainAppLayout">
 
     <div class="top-left-container">
@@ -205,7 +241,7 @@
             
             <div class="profile-acc-group no-border-top active" id="p-group-user">
                 <div class="profile-acc-header" onclick="openProfileAccordion('p-group-user')">
-                    <h3>👤 Bearbeiter</h3>
+                    <h3 style="color: var(--text-sub);">👤 Bearbeiter</h3>
                     <span class="profile-acc-icon">▼</span>
                 </div>
                 <div class="profile-acc-content">
@@ -216,32 +252,19 @@
                 </div>
             </div>
 
-            <div class="profile-acc-group" id="p-group-myslides">
-                <div class="profile-acc-header" onclick="openProfileAccordion('p-group-myslides')">
-                    <h3><i class="fa-solid fa-layer-group"></i> Meine Folien</h3>
-                    <span class="profile-acc-icon">▼</span>
-                </div>
-                <div class="profile-acc-content">
-                    <button class="btn-step" style="background: #10b981; padding: 10px; font-size: 14px; margin-bottom: 12px;" onclick="createNewSlide()">
-                        <i class="fa-solid fa-plus"></i> Neue Folie
-                    </button>
-                    <div class="slides-list" id="slidesListContainer"></div>
-                </div>
-            </div>
-
-            <div class="profile-acc-group" id="p-group-shared">
-                <div class="profile-acc-header" onclick="openProfileAccordion('p-group-shared')">
-                    <h3><i class="fa-solid fa-globe"></i> Geteilte Folien</h3>
-                    <span class="profile-acc-icon">▼</span>
-                </div>
-                <div class="profile-acc-content">
-                    <div class="shared-list" id="sharedListContainer"></div>
-                </div>
+            <div class="profile-btn-row" onclick="openModal('mySlidesModal')">
+                <h3><i class="fa-solid fa-layer-group"></i> Meine Folien</h3>
+                <i class="fa-solid fa-chevron-right" style="font-size: 12px; color:var(--text-sub);"></i>
             </div>
             
-            <div class="profile-acc-group" id="p-group-admin" style="display: none;">
+            <div class="profile-btn-row" onclick="openModal('sharedSlidesModal')">
+                <h3><i class="fa-solid fa-globe"></i> Geteilte Folien</h3>
+                <i class="fa-solid fa-chevron-right" style="font-size: 12px; color:var(--text-sub);"></i>
+            </div>
+            
+            <div class="profile-acc-group" id="p-group-admin" style="display: none; border-top:1px solid var(--card-border);">
                 <div class="profile-acc-header" onclick="openProfileAccordion('p-group-admin')">
-                    <h3><i class="fa-solid fa-user-shield"></i> Admin-Verwaltung</h3>
+                    <h3 style="color: var(--text-sub);"><i class="fa-solid fa-user-shield"></i> Admin-Verwaltung</h3>
                     <span class="profile-acc-icon">▼</span>
                 </div>
                 <div class="profile-acc-content">
@@ -263,7 +286,7 @@
 
             <div class="profile-acc-group" id="p-group-links">
                 <div class="profile-acc-header" onclick="openProfileAccordion('p-group-links')">
-                    <h3><i class="fa-solid fa-link"></i> Präsentations-Links</h3>
+                    <h3 style="color: var(--text-sub);"><i class="fa-solid fa-link"></i> Präsentations-Links</h3>
                     <span class="profile-acc-icon">▼</span>
                 </div>
                 <div class="profile-acc-content">
@@ -282,7 +305,7 @@
 
             <div class="profile-acc-group" id="p-group-settings">
                 <div class="profile-acc-header" onclick="openProfileAccordion('p-group-settings')">
-                    <h3><i class="fa-solid fa-sliders"></i> Standardeinstellungen</h3>
+                    <h3 style="color: var(--text-sub);"><i class="fa-solid fa-sliders"></i> Standardeinstellungen</h3>
                     <span class="profile-acc-icon">▼</span>
                 </div>
                 <div class="profile-acc-content">
@@ -323,8 +346,9 @@
 
     <div class="top-menu-container">
         <div class="button-row">
-            <button class="menu-btn" onclick="togglePalette()">🎨</button>
-            <button class="menu-btn" id="themeToggleBtn" onclick="toggleTheme()">🌙</button>
+            <button class="menu-btn" onclick="window.location.reload()" title="Seite aktualisieren / neu laden">🔄</button>
+            <button class="menu-btn" onclick="togglePalette()" title="Farben">🎨</button>
+            <button class="menu-btn" id="themeToggleBtn" onclick="toggleTheme()" title="Design">🌙</button>
         </div>
         <div class="paint-palette" id="paintPalette">
             <div class="color-swatch" style="background: linear-gradient(45deg, #ff0055, #f97316, #eab308, #22c55e, #3b82f6, #9333ea, #ff0055);" onclick="setGradient('linear-gradient(45deg, #ff0055, #f97316, #eab308, #22c55e, #3b82f6, #9333ea, #ff0055)', '600% 600%')"></div>
@@ -332,6 +356,11 @@
             <div class="color-swatch" style="background: linear-gradient(45deg, #f59e0b, #ef4444, #d946ef, #f59e0b);" onclick="setGradient('linear-gradient(45deg, #f59e0b, #ef4444, #d946ef, #f59e0b)', '400% 400%')"></div>
             <div class="color-swatch" style="background: linear-gradient(45deg, #06b6d4, #3b82f6, #0ea5e9, #06b6d4);" onclick="setGradient('linear-gradient(45deg, #06b6d4, #3b82f6, #0ea5e9, #06b6d4)', '300% 300%')"></div>
             <div class="color-swatch" style="background: linear-gradient(45deg, #10b981, #84cc16, #22c55e, #10b981);" onclick="setGradient('linear-gradient(45deg, #10b981, #84cc16, #22c55e, #10b981)', '300% 300%')"></div>
+            <div class="color-swatch" style="background: linear-gradient(45deg, #6366f1, #a855f7, #4f46e5, #6366f1);" onclick="setGradient('linear-gradient(45deg, #6366f1, #a855f7, #4f46e5, #6366f1)', '400% 400%')"></div>
+            <div class="color-swatch" style="background: linear-gradient(45deg, #0284c7, #10b981, #6366f1, #0284c7);" onclick="setGradient('linear-gradient(45deg, #0284c7, #10b981, #6366f1, #0284c7)', '500% 500%')"></div>
+            <div class="color-swatch" style="background: linear-gradient(45deg, #7f1d1d, #ef4444, #f97316, #7f1d1d);" onclick="setGradient('linear-gradient(45deg, #7f1d1d, #ef4444, #f97316, #7f1d1d)', '300% 300%')"></div>
+            <div class="color-swatch" style="background: linear-gradient(45deg, #1e1b4b, #eab308, #312e81, #1e1b4b);" onclick="setGradient('linear-gradient(45deg, #1e1b4b, #eab308, #312e81, #1e1b4b)', '400% 400%')"></div>
+            <div class="color-swatch" style="background: linear-gradient(45deg, #f472b6, #38bdf8, #f472b6, #38bdf8);" onclick="setGradient('linear-gradient(45deg, #f472b6, #38bdf8, #f472b6, #38bdf8)', '300% 300%')"></div>
         </div>
     </div>
 
@@ -347,9 +376,6 @@
                 <button class="btn-step" style="background: #eab308;" onclick="openGoogleSlidesEditor()">
                     <i class="fa-solid fa-pen-to-square"></i> 📝 Präsentation bearbeiten
                 </button>
-                <button class="btn-secondary" style="margin-top:0; padding:12px;" onclick="triggerNativeCast()">
-                    <i class="fa-solid fa-wifi"></i> 🌐 Chrome Cast Box verbinden
-                </button>
             </div>
         </div>
     </div>
@@ -361,8 +387,9 @@
                 <span class="acc-icon">▼</span>
             </div>
             <div class="acc-content">
-                <div style="border: 2px dashed var(--card-border); border-radius: 12px; padding: 20px; text-align: center; background: var(--input-bg); cursor: pointer;" onclick="document.getElementById('fileInput').click()">
-                    <span id="dropZoneText">Datei auswählen</span>
+                <div class="upload-box" id="uploadBox" onclick="document.getElementById('fileInput').click()">
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                    <span id="dropZoneText" style="font-weight: 600;">Datei auswählen oder hierher ziehen</span>
                     <input type="file" id="fileInput" accept="image/*,video/*" style="display:none" onchange="handleFileSelect(this)">
                 </div>
             </div>
@@ -439,10 +466,40 @@
 
         <div class="acc-group" id="group-align">
             <div class="acc-header" onclick="openAccordion('group-align')">
-                <h2>5. Layout & Position</h2>
+                <h2>5. Layout & Hintergrund</h2>
                 <span class="acc-icon">▼</span>
             </div>
             <div class="acc-content">
+                
+                <div style="margin-bottom:15px; padding:12px; border:1px solid var(--card-border); border-radius:12px; background: rgba(0,0,0,0.02);">
+                    <label style="font-size:11px; font-weight:700; color:var(--text-main); display:block; margin-bottom:8px; text-transform:uppercase;">Hintergrund & Effekte</label>
+                    
+                    <select id="bgMode" onchange="handleBgModeChange()" style="margin-bottom:10px;">
+                        <option value="media">Hintergrund = Hochgeladenes Bild</option>
+                        <option value="color">Hintergrund = Einfarbige Fläche</option>
+                        <option value="gradient">Hintergrund = Farbverlauf</option>
+                    </select>
+
+                    <div id="bgColorControls" style="display:none; gap:10px; margin-bottom:10px;">
+                        <div style="flex:1;">
+                            <label style="font-size:11px; color:var(--text-sub); display:block; margin-bottom:4px;">Farbe 1</label>
+                            <input type="color" id="bgColor1" value="#1e3a8a" onchange="autoSaveAndRefresh()" style="width:100%; height:35px; padding:0; border-radius:6px;">
+                        </div>
+                        <div style="flex:1;" id="bgColor2Container">
+                            <label style="font-size:11px; color:var(--text-sub); display:block; margin-bottom:4px;">Farbe 2</label>
+                            <input type="color" id="bgColor2" value="#3b82f6" onchange="autoSaveAndRefresh()" style="width:100%; height:35px; padding:0; border-radius:6px;">
+                        </div>
+                    </div>
+
+                    <div id="imageStyleControl">
+                        <label style="font-size:11px; color:var(--text-sub); display:block; margin-bottom:4px;">Bildeffekt (falls Hintergrund = Bild)</label>
+                        <select id="imageStyle" onchange="autoSaveAndRefresh()">
+                            <option value="normal">Normal (Standard)</option>
+                            <option value="blur">Verschwommen & Dunkel (Kino-Hintergrund)</option>
+                        </select>
+                    </div>
+                </div>
+
                 <div style="display:flex; gap:10px; margin-bottom:12px;">
                     <div style="flex:1;">
                         <label style="font-size:11px; color:var(--text-sub); display:block; margin-bottom:4px;">Seitenverhältnis</label>
@@ -450,7 +507,7 @@
                             <option value="16/9">16:9 (Standard)</option>
                             <option value="4/3">4:3</option>
                             <option value="1/1">1:1 (Quadrat)</option>
-                            <option value="9/16">9:16 (Hochformat / Portrait)</option>
+                            <option value="9/16">9:16 (Hochformat)</option>
                             <option value="image">Wie Bild (Original)</option>
                         </select>
                     </div>
@@ -462,14 +519,6 @@
                             <option value="outside-right">Außerhalb (Rechts)</option>
                         </select>
                     </div>
-                </div>
-                
-                <div style="margin-bottom:15px;">
-                    <label style="font-size:11px; color:var(--text-sub); display:block; margin-bottom:4px;">Bild-Anzeige (Hintergrund)</label>
-                    <select id="imageStyle" onchange="autoSaveAndRefresh()">
-                        <option value="normal">Normal (Standard)</option>
-                        <option value="blur">Verschwommen & Dunkel (Kino-Hintergrund)</option>
-                    </select>
                 </div>
                 
                 <label style="font-size:12px; color:var(--text-sub);"><i class="fa-solid fa-arrows-left-right"></i> X-Achse (oder auf Bild ziehen)</label><input type="range" id="posX" min="0" max="100" value="50" oninput="autoSaveAndRefresh()">
@@ -540,7 +589,7 @@
     let exportFileName = "";
     let isPlayingAnimation = false;
     let isDraggingText = false;
-    let isSyncing = false; // Verhindert Endlosschleife beim Speichern
+    let isSyncing = false;
 
     const canvas = document.getElementById('canvasPreview');
     const ctx = canvas.getContext('2d');
@@ -560,10 +609,10 @@
         renderSavedProfiles();
         checkUserSession();
         initDragEvents();
+        initUploadDragDrop(); // Initialisiert Drag & Drop im Datei-Feld
     };
 
     function initFirebaseSync() {
-        // Konten synchronisieren
         db.ref('accounts').on('value', (snapshot) => {
             const data = snapshot.val();
             if (data) {
@@ -572,46 +621,31 @@
                 
                 if (currentUser && data[currentUser]) {
                     savedSlides = data[currentUser].slides || [];
-                    renderSidebar();
-                    // Lade die Folie neu, um Sync-Änderungen anderer Geräte zu sehen
+                    renderSidebarModals();
                     if (activeSlideIndex >= savedSlides.length) activeSlideIndex = Math.max(0, savedSlides.length - 1);
                     loadSlideIntoEditor(activeSlideIndex);
                 }
-                if (currentUser === ADMIN_USER) {
-                    renderAdminUserList();
-                }
+                if (currentUser === ADMIN_USER) { renderAdminUserList(); }
                 isSyncing = false;
             }
         });
 
-        // Gemeinsame Mediathek synchronisieren
         db.ref('shared_slides').on('value', (snapshot) => {
             const data = snapshot.val();
             if (data) {
                 localStorage.setItem('werbung_pro_shared_slides', JSON.stringify(data));
-                renderSharedSlides();
+                renderSharedSlidesModal();
             }
         });
     }
 
-    // Speichern-Funktionen (Schreiben in LocalStorage UND Firebase DB)
-    function saveAccounts(accounts) { 
-        localStorage.setItem('werbung_pro_accounts', JSON.stringify(accounts)); 
-        if (!isSyncing) {
-            db.ref('accounts').set(accounts); 
-        }
-    }
-    
-    function saveSharedSlides(slides) { 
-        localStorage.setItem('werbung_pro_shared_slides', JSON.stringify(slides)); 
-        db.ref('shared_slides').set(slides); 
-    }
-
+    function saveAccounts(accounts) { localStorage.setItem('werbung_pro_accounts', JSON.stringify(accounts)); if (!isSyncing) { db.ref('accounts').set(accounts); } }
+    function saveSharedSlides(slides) { localStorage.setItem('werbung_pro_shared_slides', JSON.stringify(slides)); db.ref('shared_slides').set(slides); }
     function getAccounts() { return JSON.parse(localStorage.getItem('werbung_pro_accounts')) || {}; }
     function getSharedSlides() { return JSON.parse(localStorage.getItem('werbung_pro_shared_slides')) || []; }
 
     // -------------------------------------------------------------
-    // 4. UI STEUERUNG
+    // 4. UI STEUERUNG (MODALS, MENU, SETTINGS)
     // -------------------------------------------------------------
     function toggleProfileDropdown() { document.getElementById('profileDropdown').classList.toggle('active'); }
 
@@ -628,15 +662,67 @@
         if (!isActive) element.classList.add('active');
     }
 
+    // MODAL LOGIK
+    function openModal(modalId) {
+        document.getElementById(modalId).style.display = 'flex';
+        document.getElementById('profileDropdown').classList.remove('active');
+    }
+    function closeModal(modalId) { document.getElementById(modalId).style.display = 'none'; }
+
+    // HINTERGRUND-MODUS UI ÄNDERUNG
+    function handleBgModeChange() {
+        const bgMode = document.getElementById('bgMode').value;
+        const colorControls = document.getElementById('bgColorControls');
+        const color2Container = document.getElementById('bgColor2Container');
+        const imageStyleControl = document.getElementById('imageStyleControl');
+
+        if (bgMode === 'media') {
+            colorControls.style.display = 'none';
+            imageStyleControl.style.display = 'block';
+        } else if (bgMode === 'color') {
+            colorControls.style.display = 'flex';
+            color2Container.style.display = 'none';
+            imageStyleControl.style.display = 'none';
+        } else if (bgMode === 'gradient') {
+            colorControls.style.display = 'flex';
+            color2Container.style.display = 'block';
+            imageStyleControl.style.display = 'none';
+        }
+        autoSaveAndRefresh();
+    }
+
+    // DRAG AND DROP DATEI UPLOAD LOGIK
+    function initUploadDragDrop() {
+        const uploadBox = document.getElementById('uploadBox');
+        
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            uploadBox.addEventListener(eventName, preventDefaults, false);
+            document.body.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults (e) { e.preventDefault(); e.stopPropagation(); }
+
+        ['dragenter', 'dragover'].forEach(eventName => { uploadBox.addEventListener(eventName, () => uploadBox.classList.add('dragover'), false); });
+        ['dragleave', 'drop'].forEach(eventName => { uploadBox.addEventListener(eventName, () => uploadBox.classList.remove('dragover'), false); });
+
+        uploadBox.addEventListener('drop', handleDrop, false);
+        
+        function handleDrop(e) {
+            let dt = e.dataTransfer; let files = dt.files;
+            if (files.length > 0) {
+                document.getElementById('fileInput').files = files;
+                handleFileSelect(document.getElementById('fileInput'));
+            }
+        }
+    }
+
     function initAdminAccount() {
         let accounts = getAccounts();
         if (!accounts[ADMIN_USER] || accounts[ADMIN_USER].password !== ADMIN_PASS) {
             accounts[ADMIN_USER] = {
-                password: ADMIN_PASS,
-                liveUrl: DEFAULT_LIVE_URL,
-                editUrl: DEFAULT_EDIT_URL,
+                password: ADMIN_PASS, liveUrl: DEFAULT_LIVE_URL, editUrl: DEFAULT_EDIT_URL,
                 defaults: { font: "Poppins", size: "45", textColor: "#ffffff", outlineColor: "#a855f7", effect: "fade" },
-                slides: [{ title: "Willkommen", text: "Admin Dashboard\nStudio-Zentrale", font: "Poppins", size: "45", textColor: "#ffffff", outlineColor: "#a855f7", effect: "fade", direction: "bottom", duration: "0.8", pause: "5", posX: "50", posY: "70", mediaData: null, mediaType: null, aspectRatio: "16/9", textPosition: "inside", imageStyle: "normal" }]
+                slides: [{ title: "Willkommen", text: "Admin Dashboard\nStudio-Zentrale", font: "Poppins", size: "45", textColor: "#ffffff", outlineColor: "#a855f7", effect: "fade", direction: "bottom", duration: "0.8", pause: "5", posX: "50", posY: "70", mediaData: null, mediaType: null, aspectRatio: "16/9", textPosition: "inside", imageStyle: "normal", bgMode: "media", bgColor1: "#1e3a8a", bgColor2: "#3b82f6" }]
             };
             saveAccounts(accounts);
         }
@@ -653,16 +739,14 @@
 
     function renderSavedProfiles() {
         const profiles = getSavedProfiles();
-        const section = document.getElementById('savedProfilesSection');
-        const container = document.getElementById('savedProfilesContainer');
+        const section = document.getElementById('savedProfilesSection'); const container = document.getElementById('savedProfilesContainer');
         if (profiles.length === 0) { section.style.display = 'none'; return; }
         section.style.display = 'block'; container.innerHTML = "";
         profiles.forEach(username => {
             const badge = document.createElement('div'); badge.className = "profile-badge";
             badge.onclick = (e) => {
                 if (e.target.closest('.remove-profile-btn')) return;
-                document.getElementById('loginUsername').value = username;
-                document.getElementById('loginPassword').value = ""; document.getElementById('loginPassword').focus();
+                document.getElementById('loginUsername').value = username; document.getElementById('loginPassword').value = ""; document.getElementById('loginPassword').focus();
             };
             badge.innerHTML = `<span>👤 ${username}</span><button class="remove-profile-btn">×</button>`;
             badge.querySelector('.remove-profile-btn').onclick = (e) => { e.stopPropagation(); removeProfileFromView(username); };
@@ -670,14 +754,10 @@
         });
     }
 
-    function removeProfileFromView(username) {
-        let profiles = getSavedProfiles(); profiles = profiles.filter(p => p !== username);
-        saveSavedProfiles(profiles); renderSavedProfiles();
-    }
+    function removeProfileFromView(username) { let profiles = getSavedProfiles(); profiles = profiles.filter(p => p !== username); saveSavedProfiles(profiles); renderSavedProfiles(); }
 
     function handleLogin() {
-        const u = document.getElementById('loginUsername').value.trim();
-        const p = document.getElementById('loginPassword').value.trim();
+        const u = document.getElementById('loginUsername').value.trim(); const p = document.getElementById('loginPassword').value.trim();
         const errorDiv = document.getElementById('authError');
         if (u === ADMIN_USER && p === ADMIN_PASS) { errorDiv.textContent = ""; rememberProfile(u); loginUser(u); return; }
         let accounts = getAccounts();
@@ -687,8 +767,7 @@
 
     function loginUser(username) {
         currentUser = username; localStorage.setItem('werbung_pro_logged_in_user', username);
-        document.getElementById('gatekeeperOverlay').style.display = 'none';
-        document.getElementById('mainAppLayout').style.display = 'flex';
+        document.getElementById('gatekeeperOverlay').style.display = 'none'; document.getElementById('mainAppLayout').style.display = 'flex';
         document.getElementById('profileUserLabel').textContent = `👤 ${username}`;
         
         if (username === ADMIN_USER) { document.getElementById('p-group-admin').style.display = 'block'; renderAdminUserList(); } 
@@ -699,12 +778,10 @@
         document.getElementById('profileEditUrl').value = userAcc.editUrl || DEFAULT_EDIT_URL;
         
         let defs = userAcc.defaults || { font: "Poppins", size: "50", textColor: "#ffffff", outlineColor: "#000000", effect: "fly" };
-        document.getElementById('defFont').value = defs.font;
-        document.getElementById('defSize').value = defs.size; document.getElementById('defColor').value = defs.textColor;
-        document.getElementById('defEffect').value = defs.effect;
+        document.getElementById('defFont').value = defs.font; document.getElementById('defSize').value = defs.size; document.getElementById('defColor').value = defs.textColor; document.getElementById('defEffect').value = defs.effect;
 
         savedSlides = userAcc.slides || []; activeSlideIndex = 0;
-        loadSlideIntoEditor(activeSlideIndex); renderSharedSlides();
+        loadSlideIntoEditor(activeSlideIndex); renderSharedSlidesModal();
     }
 
     function handleLogout() {
@@ -716,14 +793,10 @@
         renderSavedProfiles();
     }
 
-    function checkUserSession() {
-        const sessionUser = localStorage.getItem('werbung_pro_logged_in_user');
-        if(sessionUser) loginUser(sessionUser); else handleLogout();
-    }
+    function checkUserSession() { const sessionUser = localStorage.getItem('werbung_pro_logged_in_user'); if(sessionUser) loginUser(sessionUser); else handleLogout(); }
 
     function renderAdminUserList() {
-        const container = document.getElementById('adminUserListContainer'); container.innerHTML = "";
-        let accounts = getAccounts();
+        const container = document.getElementById('adminUserListContainer'); container.innerHTML = ""; let accounts = getAccounts();
         Object.keys(accounts).forEach(username => {
             const row = document.createElement('div'); row.className = "admin-user-row";
             row.innerHTML = `<span class="admin-user-name">${username} ${username === ADMIN_USER ? '(Admin)' : ''}</span><div><button class="admin-action-btn edit"><i class="fa-solid fa-user-pen"></i></button><button class="admin-action-btn delete" ${username === ADMIN_USER ? 'disabled' : ''}><i class="fa-solid fa-user-minus"></i></button></div>`;
@@ -735,17 +808,15 @@
 
     function adminEditUser(oldUsername) {
         let newUsername = prompt(`Gib einen neuen Benutzernamen für '${oldUsername}' ein:`, oldUsername);
-        if (!newUsername || newUsername.trim() === "" || newUsername.trim() === oldUsername) return;
-        newUsername = newUsername.trim(); let accounts = getAccounts();
-        if (accounts[newUsername]) { alert("Dieser Benutzername existiert bereits!"); return; }
+        if (!newUsername || newUsername.trim() === "" || newUsername.trim() === oldUsername) return; newUsername = newUsername.trim();
+        let accounts = getAccounts(); if (accounts[newUsername]) { alert("Dieser Benutzername existiert bereits!"); return; }
         accounts[newUsername] = accounts[oldUsername]; delete accounts[oldUsername]; saveAccounts(accounts);
         let profiles = getSavedProfiles(); if (profiles.includes(oldUsername)) { profiles = profiles.map(p => p === oldUsername ? newUsername : p); saveSavedProfiles(profiles); }
         renderAdminUserList(); renderSavedProfiles();
     }
 
     function adminDeleteUser(usernameToDelete) {
-        if (!confirm(`Konto '${usernameToDelete}' wirklich löschen?`)) return;
-        let accounts = getAccounts(); delete accounts[usernameToDelete]; saveAccounts(accounts);
+        if (!confirm(`Konto '${usernameToDelete}' wirklich löschen?`)) return; let accounts = getAccounts(); delete accounts[usernameToDelete]; saveAccounts(accounts);
         removeProfileFromView(usernameToDelete); renderAdminUserList();
     }
 
@@ -755,25 +826,14 @@
         const msgDiv = document.getElementById('adminPanelMessage');
         if (!newU || !newP) { msgDiv.style.color = "#ef4444"; msgDiv.textContent = "Ausfüllen!"; return; }
         let accounts = getAccounts(); if (accounts[newU]) { msgDiv.style.color = "#ef4444"; msgDiv.textContent = "Existiert bereits!"; return; }
-        accounts[newU] = { password: newP, liveUrl: DEFAULT_LIVE_URL, editUrl: DEFAULT_EDIT_URL, defaults: { font: "Poppins", size: "50", textColor: "#ffffff", outlineColor: "#000000", effect: "fly" }, slides: [{ title: `Willkommen`, text: `Willkommen\n${newU}`, font: "Poppins", size: "50", textColor: "#ffffff", outlineColor: "#000000", effect: "fly", direction: "bottom", duration: "0.8", pause: "5", posX: "50", posY: "75", mediaData: null, mediaType: null, aspectRatio: "16/9", textPosition: "inside", imageStyle: "normal" }] };
+        accounts[newU] = { password: newP, liveUrl: DEFAULT_LIVE_URL, editUrl: DEFAULT_EDIT_URL, defaults: { font: "Poppins", size: "50", textColor: "#ffffff", outlineColor: "#000000", effect: "fly" }, slides: [{ title: `Willkommen`, text: `Willkommen\n${newU}`, font: "Poppins", size: "50", textColor: "#ffffff", outlineColor: "#000000", effect: "fly", direction: "bottom", duration: "0.8", pause: "5", posX: "50", posY: "75", mediaData: null, mediaType: null, aspectRatio: "16/9", textPosition: "inside", imageStyle: "normal", bgMode: "media", bgColor1: "#1e3a8a", bgColor2: "#3b82f6" }] };
         saveAccounts(accounts); msgDiv.style.color = "#10b981"; msgDiv.textContent = `✓ '${newU}' erstellt!`;
         document.getElementById('adminNewUsername').value = ""; document.getElementById('adminNewPassword').value = ""; renderAdminUserList();
     }
 
-    function saveCurrentSlidesToAccount() {
-        if(!currentUser) return; let accounts = getAccounts();
-        if(accounts[currentUser]) { accounts[currentUser].slides = savedSlides; saveAccounts(accounts); }
-    }
-
-    function saveProfileLinks() {
-        if(!currentUser) return; let accounts = getAccounts();
-        if(accounts[currentUser]) { accounts[currentUser].liveUrl = document.getElementById('profileLiveUrl').value; accounts[currentUser].editUrl = document.getElementById('profileEditUrl').value; saveAccounts(accounts); }
-    }
-
-    function saveProfileDefaults() {
-        if(!currentUser) return; let accounts = getAccounts();
-        if(accounts[currentUser]) { accounts[currentUser].defaults = { font: document.getElementById('defFont').value, size: document.getElementById('defSize').value, textColor: document.getElementById('defColor').value, outlineColor: "#000000", effect: document.getElementById('defEffect').value }; saveAccounts(accounts); }
-    }
+    function saveCurrentSlidesToAccount() { if(!currentUser) return; let accounts = getAccounts(); if(accounts[currentUser]) { accounts[currentUser].slides = savedSlides; saveAccounts(accounts); } }
+    function saveProfileLinks() { if(!currentUser) return; let accounts = getAccounts(); if(accounts[currentUser]) { accounts[currentUser].liveUrl = document.getElementById('profileLiveUrl').value; accounts[currentUser].editUrl = document.getElementById('profileEditUrl').value; saveAccounts(accounts); } }
+    function saveProfileDefaults() { if(!currentUser) return; let accounts = getAccounts(); if(accounts[currentUser]) { accounts[currentUser].defaults = { font: document.getElementById('defFont').value, size: document.getElementById('defSize').value, textColor: document.getElementById('defColor').value, outlineColor: "#000000", effect: document.getElementById('defEffect').value }; saveAccounts(accounts); } }
 
     // -------------------------------------------------------------
     // 5. EDITOR & CANVAS ENGINE
@@ -789,7 +849,6 @@
                 mediaType = 'video'; loadedImage = null; hiddenVideo.src = dataUrl;
                 hiddenVideo.onloadedmetadata = () => { autoSaveAndRefresh(); hiddenVideo.play(); renderVideoLoop(); };
                 
-                // Video wird 1:1 gesichert
                 if(savedSlides[activeSlideIndex]) {
                     savedSlides[activeSlideIndex].mediaData = dataUrl;
                     savedSlides[activeSlideIndex].mediaType = mediaType;
@@ -799,7 +858,6 @@
             } else {
                 mediaType = 'image'; hiddenVideo.pause(); const img = new Image();
                 img.onload = () => { 
-                    // BILD KOMPRIMIERUNG BEVOR ES IN FIREBASE GEHT (WICHTIG FÜR PERFORMANCE)
                     const maxDim = 1200; let w = img.width; let h = img.height;
                     if (w > maxDim || h > maxDim) {
                         if (w > h) { h = Math.round((h * maxDim) / w); w = maxDim; }
@@ -807,7 +865,7 @@
                     }
                     const tempCanvas = document.createElement('canvas'); tempCanvas.width = w; tempCanvas.height = h;
                     const tempCtx = tempCanvas.getContext('2d'); tempCtx.drawImage(img, 0, 0, w, h);
-                    const compressedDataUrl = tempCanvas.toDataURL('image/jpeg', 0.7); // 70% JPEG Qualität für Datenbank
+                    const compressedDataUrl = tempCanvas.toDataURL('image/jpeg', 0.7);
 
                     loadedImage = new Image();
                     loadedImage.onload = () => { autoSaveAndRefresh(); }; 
@@ -833,7 +891,8 @@
         const newSlide = { 
             title: "Neue Folie", text: "Neue Folie\nTippe hier", font: defs.font || "Poppins", size: defs.size || "50", textColor: defs.textColor || "#ffffff", outlineColor: defs.outlineColor || "#000000", effect: defs.effect || "fly", 
             direction: "bottom", duration: "0.8", pause: "5", posX: "50", posY: "75",
-            mediaData: null, mediaType: null, mediaName: null, aspectRatio: "16/9", textPosition: "inside", imageStyle: "normal"
+            mediaData: null, mediaType: null, mediaName: null, aspectRatio: "16/9", textPosition: "inside", imageStyle: "normal",
+            bgMode: "media", bgColor1: "#1e3a8a", bgColor2: "#3b82f6"
         };
         savedSlides.push(newSlide); activeSlideIndex = savedSlides.length - 1;
         saveCurrentSlidesToAccount(); loadSlideIntoEditor(activeSlideIndex);
@@ -857,7 +916,13 @@
         document.getElementById('posY').value = slide.posY;
         document.getElementById('aspectRatio').value = slide.aspectRatio || "16/9";
         document.getElementById('textPosition').value = slide.textPosition || "inside";
+        
+        // Hintergrund-Werte UI Update
+        document.getElementById('bgMode').value = slide.bgMode || "media";
+        document.getElementById('bgColor1').value = slide.bgColor1 || "#1e3a8a";
+        document.getElementById('bgColor2').value = slide.bgColor2 || "#3b82f6";
         document.getElementById('imageStyle').value = slide.imageStyle || "normal";
+        handleBgModeChange();
 
         if(slide.mediaData && slide.mediaType) {
             mediaType = slide.mediaType; document.getElementById('dropZoneText').textContent = slide.mediaName || "Datei geladen";
@@ -870,10 +935,10 @@
             }
         } else {
             mediaType = null; loadedImage = null; hiddenVideo.src = "";
-            document.getElementById('dropZoneText').textContent = "Datei auswählen";
+            document.getElementById('dropZoneText').textContent = "Datei auswählen oder hierher ziehen";
             if (!isSyncing) autoSaveAndRefresh(); else handleRatioOrBgChange();
         }
-        handleEffectChange(); renderSidebar(); updateView();
+        handleEffectChange(); renderSidebarModals(); updateView();
     }
 
     function handleRatioOrBgChange() {
@@ -907,10 +972,14 @@
             savedSlides[activeSlideIndex].posY = document.getElementById('posY').value;
             savedSlides[activeSlideIndex].aspectRatio = document.getElementById('aspectRatio').value;
             savedSlides[activeSlideIndex].textPosition = document.getElementById('textPosition').value;
+            
+            savedSlides[activeSlideIndex].bgMode = document.getElementById('bgMode').value;
+            savedSlides[activeSlideIndex].bgColor1 = document.getElementById('bgColor1').value;
+            savedSlides[activeSlideIndex].bgColor2 = document.getElementById('bgColor2').value;
             savedSlides[activeSlideIndex].imageStyle = document.getElementById('imageStyle').value;
         }
         handleRatioOrBgChange();
-        saveCurrentSlidesToAccount(); renderSidebar(); updateView();
+        saveCurrentSlidesToAccount(); renderSidebarModals(); updateView();
     }
 
     function drawMediaCover(targetCtx, element, canvasW, canvasH) {
@@ -941,7 +1010,23 @@
         } else if (!targetCanvas.width) { targetCanvas.width = 800; targetCanvas.height = 450; }
 
         targetCtx.clearRect(0, 0, targetCanvas.width, targetCanvas.height);
-        targetCtx.fillStyle = '#111111'; targetCtx.fillRect(0, 0, targetCanvas.width, targetCanvas.height);
+
+        // 1. HINTERGRUND RENDERN (Farbe, Verlauf oder Schwarz)
+        const bgMode = slide ? (slide.bgMode || "media") : "media";
+        
+        if (bgMode === "color") {
+            targetCtx.fillStyle = slide ? (slide.bgColor1 || "#1e3a8a") : "#1e3a8a";
+            targetCtx.fillRect(0, 0, targetCanvas.width, targetCanvas.height);
+        } else if (bgMode === "gradient") {
+            let grad = targetCtx.createLinearGradient(0, 0, 0, targetCanvas.height);
+            grad.addColorStop(0, slide ? (slide.bgColor1 || "#1e3a8a") : "#1e3a8a");
+            grad.addColorStop(1, slide ? (slide.bgColor2 || "#3b82f6") : "#3b82f6");
+            targetCtx.fillStyle = grad;
+            targetCtx.fillRect(0, 0, targetCanvas.width, targetCanvas.height);
+        } else {
+            targetCtx.fillStyle = '#111111';
+            targetCtx.fillRect(0, 0, targetCanvas.width, targetCanvas.height);
+        }
 
         const textPos = slide ? (slide.textPosition || "inside") : "inside";
         let imgX = 0, imgY = 0, imgW = targetCanvas.width, imgH = targetCanvas.height;
@@ -955,6 +1040,7 @@
             targetCtx.fillStyle = '#1a1d24'; targetCtx.fillRect(textAreaX, textAreaY, textAreaW, textAreaH);
         }
 
+        // 2. BILD RENDERN (immer, wenn vorhanden!)
         if (mediaType === 'video' || loadedImage) {
             let mediaObj = (mediaType === 'video') ? hiddenVideo : loadedImage;
             let iw = (mediaType === 'video') ? hiddenVideo.videoWidth : loadedImage.width;
@@ -962,17 +1048,18 @@
             
             if (iw && ih) {
                 const imgStyle = slide ? (slide.imageStyle || "normal") : "normal";
-                if (imgStyle === 'blur') {
+                
+                // Kinohintergrund nur wenn bgMode="media"
+                if (bgMode === 'media' && imgStyle === 'blur') {
                     targetCtx.save(); targetCtx.filter = "blur(14px) brightness(45%)";
                     let scaleX = imgW / iw, scaleY = imgH / ih, maxScale = Math.max(scaleX, scaleY);
                     let bgW = iw * maxScale, bgH = ih * maxScale, bgX = imgX + (imgW - bgW) / 2, bgY = imgY + (imgH - bgH) / 2;
                     targetCtx.drawImage(mediaObj, bgX, bgY, bgW, bgH); targetCtx.restore();
-                    let r = Math.min(imgW / iw, imgH / ih), nw = iw * r, nh = ih * r, cx = imgX + (imgW - nw) / 2, cy = imgY + (imgH - nh) / 2;
-                    targetCtx.drawImage(mediaObj, cx, cy, nw, nh);
-                } else {
-                    let r = Math.min(imgW / iw, imgH / ih), nw = iw * r, nh = ih * r, cx = imgX + (imgW - nw) / 2, cy = imgY + (imgH - nh) / 2;
-                    targetCtx.drawImage(mediaObj, cx, cy, nw, nh);
                 }
+
+                // Normales Bild (im Contain-Modus) auf den Hintergrund legen
+                let r = Math.min(imgW / iw, imgH / ih), nw = iw * r, nh = ih * r, cx = imgX + (imgW - nw) / 2, cy = imgY + (imgH - nh) / 2;
+                targetCtx.drawImage(mediaObj, cx, cy, nw, nh);
             }
         }
 
@@ -1051,19 +1138,37 @@
         let sharedPool = getSharedSlides();
         const newSharedItem = { ...currentSlide, id: Date.now() + Math.random().toString(36).substr(2, 5), author: currentUser };
         sharedPool.unshift(newSharedItem); saveSharedSlides(sharedPool);
-        alert("🎉 Folie für die Mediathek freigegeben!"); renderSharedSlides();
+        alert("🎉 Folie für die Mediathek freigegeben!"); renderSharedSlidesModal();
     }
 
-    function renderSharedSlides() {
-        const container = document.getElementById('sharedListContainer'); container.innerHTML = "";
+    // MODAL-RENDERING DER LISTEN
+    function renderSharedSlidesModal() {
+        const container = document.getElementById('modalSharedSlidesList');
+        if (!container) return;
+        container.innerHTML = "";
         const pool = getSharedSlides();
-        if(pool.length === 0) { container.innerHTML = `<span style="font-style:italic; font-size:13px; color:var(--text-sub); text-align:center; display:block; margin-top:15px;">Keine geteilten Folien.</span>`; return; }
+        if(pool.length === 0) { container.innerHTML = `<span style="font-style:italic; font-size:14px; color:var(--text-sub); text-align:center; display:block; padding: 20px;">Noch keine Folien in der gemeinsamen Mediathek.</span>`; return; }
         pool.forEach((item, index) => {
             const div = document.createElement('div'); div.className = "shared-item";
             const displayTitle = (item.title && item.title.trim() !== "") ? item.title : (item.text.split('\n')[0] || "Folie");
-            div.innerHTML = `<div class="shared-item-info"><div class="shared-item-title">${displayTitle}</div><div class="shared-item-author">von ${item.author}</div></div><div style="display:flex; gap:8px;"><button class="btn-add-shared"><i class="fa-solid fa-plus"></i></button><button class="slide-action-btn delete-shared-btn"><i class="fa-solid fa-trash"></i></button></div>`;
-            div.querySelector('.btn-add-shared').addEventListener('click', () => { addSharedSlideToMyList(item); });
+            div.innerHTML = `<div class="shared-item-info"><div class="shared-item-title">${displayTitle}</div><div class="shared-item-author">von ${item.author}</div></div><div style="display:flex; gap:8px;"><button class="btn-add-shared"><i class="fa-solid fa-download"></i> Übernehmen</button><button class="slide-action-btn delete-shared-btn"><i class="fa-solid fa-trash"></i></button></div>`;
+            div.querySelector('.btn-add-shared').addEventListener('click', () => { addSharedSlideToMyList(item); closeModal('sharedSlidesModal'); });
             div.querySelector('.delete-shared-btn').addEventListener('click', () => { deleteSharedSlide(index); });
+            container.appendChild(div);
+        });
+    }
+
+    function renderSidebarModals() {
+        // Meine Folien Modal füllen
+        const container = document.getElementById('modalMySlidesList');
+        if (!container) return;
+        container.innerHTML = "";
+        savedSlides.forEach((slide, index) => {
+            const div = document.createElement('div'); div.className = `slide-item ${index === activeSlideIndex ? 'active' : ''}`;
+            div.addEventListener('click', (e) => { if (!e.target.closest('.slide-action-btn')) { loadSlideIntoEditor(index); closeModal('mySlidesModal'); } });
+            const displayTitle = (slide.title && slide.title.trim() !== "") ? slide.title : (slide.text.split('\n')[0] || `Folie ${index + 1}`);
+            div.innerHTML = `<div class="slide-item-title">#${index + 1}: ${displayTitle}</div><button class="slide-action-btn" title="Löschen"><i class="fa-solid fa-trash"></i></button>`;
+            div.querySelector('.slide-action-btn').addEventListener('click', (e) => { e.stopPropagation(); deleteSlide(index); });
             container.appendChild(div);
         });
     }
@@ -1074,19 +1179,7 @@
         saveCurrentSlidesToAccount(); loadSlideIntoEditor(activeSlideIndex); alert(`📥 In deine Liste kopiert!`);
     }
 
-    function deleteSharedSlide(index) { let sharedPool = getSharedSlides(); sharedPool.splice(index, 1); saveSharedSlides(sharedPool); renderSharedSlides(); }
-
-    function renderSidebar() {
-        const container = document.getElementById('slidesListContainer'); container.innerHTML = "";
-        savedSlides.forEach((slide, index) => {
-            const div = document.createElement('div'); div.className = `slide-item ${index === activeSlideIndex ? 'active' : ''}`;
-            div.addEventListener('click', (e) => { if (!e.target.closest('.slide-action-btn')) loadSlideIntoEditor(index); });
-            const displayTitle = (slide.title && slide.title.trim() !== "") ? slide.title : (slide.text.split('\n')[0] || `Folie ${index + 1}`);
-            div.innerHTML = `<div class="slide-item-title">#${index + 1}: ${displayTitle}</div><button class="slide-action-btn"><i class="fa-solid fa-trash"></i></button>`;
-            div.querySelector('.slide-action-btn').addEventListener('click', (e) => { e.stopPropagation(); deleteSlide(index); });
-            container.appendChild(div);
-        });
-    }
+    function deleteSharedSlide(index) { let sharedPool = getSharedSlides(); sharedPool.splice(index, 1); saveSharedSlides(sharedPool); renderSharedSlidesModal(); }
 
     function deleteSlide(index) {
         if (savedSlides.length <= 1) { alert("Du musst eine Folie behalten!"); return; }
